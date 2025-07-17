@@ -24,8 +24,37 @@ Task Management System là một ứng dụng web cho phép người dùng cá n
 
 ---
 
-## 📦 Cấu trúc hệ thống
-<pre> ```text task-management-system/ │ ├── backend/ │ ├── src/ │ │ ├── main/java/com/example/taskmanagement │ │ │ ├── controller/ │ │ │ ├── dto/ │ │ │ ├── entity/ │ │ │ ├── repository/ │ │ │ ├── security/ │ │ │ ├── service/ │ │ │ └── TaskManagementApplication.java │ │ └── resources/ │ │ └── application.properties │ └── pom.xml │ ├── frontend/ │ └── task-management-angular/ │ ├── src/ │ │ ├── app/ │ │ │ ├── components/ │ │ │ ├── services/ │ │ │ ├── models/ │ │ │ └── app.module.ts │ └── angular.json │ └── README.md ``` </pre>
+## 📁 Cấu trúc thư mục dự án
+
+```text
+task-management-system/
+│
+├── backend/
+│   ├── src/
+│   │   ├── main/java/com/example/taskmanagement/
+│   │   │   ├── controller/               # REST controllers
+│   │   │   ├── dto/                      # Data Transfer Objects
+│   │   │   ├── entity/                   # JPA entities
+│   │   │   ├── repository/               # Spring Data JPA Repositories
+│   │   │   ├── security/                 # JWT, OAuth2, security config
+│   │   │   ├── service/                  # Business logic
+│   │   │   └── TaskManagementApplication.java  # Main class
+│   │   └── resources/
+│   │       └── application.properties    # DB & App configuration
+│   └── pom.xml                           # Maven build file
+│
+├── frontend/
+│   └── task-management-angular/
+│       ├── src/
+│       │   ├── app/
+│       │   │   ├── components/           # UI components
+│       │   │   ├── services/             # API communication
+│       │   │   ├── models/               # TypeScript interfaces
+│       │   │   └── app.module.ts         # Root Angular module
+│       └── angular.json                  # Angular config
+│
+└── README.md                             # Dự án mô tả tổng quan
+
 
 ## 🔐 Xác thực & Phân quyền
 
