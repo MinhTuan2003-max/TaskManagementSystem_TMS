@@ -1,6 +1,6 @@
 package com.luv2code.springboot.demo.tsm.dto;
 
-import com.luv2code.springboot.demo.tsm.entity.ProjectRole;
+import com.luv2code.springboot.demo.tsm.entity.enumerator.ProjectRole;
 import jakarta.validation.constraints.NotNull;
 
 public class AddMemberRequest {

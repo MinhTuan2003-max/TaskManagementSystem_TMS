@@ -1,5 +1,7 @@
 package com.luv2code.springboot.demo.tsm.service;
 
+import com.luv2code.springboot.demo.tsm.controller.UserController;
+import com.luv2code.springboot.demo.tsm.dto.UpdateUserRequest;
 import com.luv2code.springboot.demo.tsm.entity.Role;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.repository.RoleRepository;
@@ -9,7 +11,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -58,5 +62,53 @@ public class UserService {
 
     public boolean existsByEmail(String email) {
         return userRepository.existsByEmail(email);
+    }
+
+    public User updateUser(Long userId, UpdateUserRequest request) {
+        User user = findById(userId);
+        user.setFullName(request.getFullName());
+        user.setEmail(request.getEmail());
+        user.setAvatarUrl(request.getAvatarUrl());
+        return userRepository.save(user);
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public List<User> searchUsers(String keyword) {
+        return userRepository.findByUsernameContainingIgnoreCaseOrFullNameContainingIgnoreCase(keyword, keyword);
+    }
+
+    public User updateUserStatus(Long userId, boolean enabled) {
+        User user = findById(userId);
+        user.setEnabled(enabled);
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(Long userId) {
+        User user = findById(userId);
+        userRepository.delete(user);
+    }
+
+    public void changePassword(Long userId, String oldPassword, String newPassword) {
+        User user = findById(userId);
+
+        if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+            throw new RuntimeException("Old password is incorrect");
+        }
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+    }
+
+    public UserController.UserStatsResponse getUserStats() {
+        long totalUsers = userRepository.count();
+        long activeUsers = userRepository.countByEnabled(true);
+        long newUsersThisMonth = userRepository.countByCreatedAtAfter(
+                LocalDateTime.now().minusMonths(1)
+        );
+
+        return new UserController.UserStatsResponse(totalUsers, activeUsers, newUsersThisMonth);
     }
 }

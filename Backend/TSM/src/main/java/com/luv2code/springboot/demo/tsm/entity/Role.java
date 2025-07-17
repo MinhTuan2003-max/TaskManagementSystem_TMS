@@ -1,12 +1,14 @@
 package com.luv2code.springboot.demo.tsm.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
+@Data
 public class Role {
 
     @Id

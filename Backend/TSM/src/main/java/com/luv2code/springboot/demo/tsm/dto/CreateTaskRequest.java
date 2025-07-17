@@ -1,6 +1,6 @@
 package com.luv2code.springboot.demo.tsm.dto;
 
-import com.luv2code.springboot.demo.tsm.entity.Priority;
+import com.luv2code.springboot.demo.tsm.entity.enumerator.Priority;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

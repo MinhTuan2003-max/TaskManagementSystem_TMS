@@ -1,8 +1,9 @@
 package com.luv2code.springboot.demo.tsm.entity;
 
-import com.luv2code.springboot.demo.sm.entity.enumerator.Priority;
-import com.luv2code.springboot.demo.sm.entity.enumerator.TaskStatus;
+import com.luv2code.springboot.demo.tsm.entity.enumerator.Priority;
+import com.luv2code.springboot.demo.tsm.entity.enumerator.TaskStatus;
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "tasks")
+@Data
 public class Task {
 
     @Id

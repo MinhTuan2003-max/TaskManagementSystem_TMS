@@ -2,6 +2,8 @@ package com.luv2code.springboot.demo.tsm.controller;
 
 import com.luv2code.springboot.demo.tsm.config.JwtUtils;
 import com.luv2code.springboot.demo.tsm.dto.JwtResponse;
+import com.luv2code.springboot.demo.tsm.dto.LoginRequest;
+import com.luv2code.springboot.demo.tsm.dto.RegisterRequest;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.service.UserService;
 import jakarta.validation.Valid;

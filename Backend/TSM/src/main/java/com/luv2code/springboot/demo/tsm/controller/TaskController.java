@@ -3,7 +3,7 @@ package com.luv2code.springboot.demo.tsm.controller;
 import com.luv2code.springboot.demo.tsm.dto.CreateTaskRequest;
 import com.luv2code.springboot.demo.tsm.dto.KanbanBoard;
 import com.luv2code.springboot.demo.tsm.entity.Task;
-import com.luv2code.springboot.demo.tsm.entity.TaskStatus;
+import com.luv2code.springboot.demo.tsm.entity.enumerator.TaskStatus;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.service.TaskService;
 import jakarta.validation.Valid;

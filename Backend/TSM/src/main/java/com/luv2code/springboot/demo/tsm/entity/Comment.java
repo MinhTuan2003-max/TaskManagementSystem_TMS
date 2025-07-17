@@ -1,12 +1,14 @@
 package com.luv2code.springboot.demo.tsm.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "comments")
+@Data
 public class Comment {
 
     @Id

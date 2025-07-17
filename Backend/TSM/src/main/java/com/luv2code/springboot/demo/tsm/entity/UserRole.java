@@ -1,9 +1,11 @@
 package com.luv2code.springboot.demo.tsm.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 @Entity
 @Table(name = "user_roles")
+@Data
 public class UserRole {
 
     @Id

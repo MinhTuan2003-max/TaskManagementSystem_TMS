@@ -2,7 +2,7 @@ package com.luv2code.springboot.demo.tsm.controller;
 
 import com.luv2code.springboot.demo.tsm.dto.AddMemberRequest;
 import com.luv2code.springboot.demo.tsm.entity.ProjectMember;
-import com.luv2code.springboot.demo.tsm.entity.ProjectRole;
+import com.luv2code.springboot.demo.tsm.entity.enumerator.ProjectRole;
 import com.luv2code.springboot.demo.tsm.service.ProjectMemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -2,12 +2,14 @@ package com.luv2code.springboot.demo.tsm.entity;
 
 import com.luv2code.springboot.demo.tsm.entity.enumerator.ProjectRole;
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "project_members")
+@Data
 public class ProjectMember {
 
     @Id

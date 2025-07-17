@@ -1,6 +1,7 @@
 package com.luv2code.springboot.demo.tsm.entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "projects")
+@Data
 public class Project {
 
     @Id
