@@ -25,34 +25,7 @@ Task Management System là một ứng dụng web cho phép người dùng cá n
 ---
 
 ## 📦 Cấu trúc hệ thống
-task-management-system/
-│
-├── backend/
-│ ├── src/
-│ │ ├── main/java/com/example/taskmanagement
-│ │ │ ├── controller/
-│ │ │ ├── dto/
-│ │ │ ├── entity/
-│ │ │ ├── repository/
-│ │ │ ├── security/
-│ │ │ ├── service/
-│ │ │ └── TaskManagementApplication.java
-│ │ └── resources/
-│ │ └── application.properties
-│ └── pom.xml
-│
-├── frontend/
-│ └── task-management-angular/
-│ ├── src/
-│ │ ├── app/
-│ │ │ ├── components/
-│ │ │ ├── services/
-│ │ │ ├── models/
-│ │ │ └── app.module.ts
-│ └── angular.json
-│
-└── README.md
----
+<pre> ```text task-management-system/ │ ├── backend/ │ ├── src/ │ │ ├── main/java/com/example/taskmanagement │ │ │ ├── controller/ │ │ │ ├── dto/ │ │ │ ├── entity/ │ │ │ ├── repository/ │ │ │ ├── security/ │ │ │ ├── service/ │ │ │ └── TaskManagementApplication.java │ │ └── resources/ │ │ └── application.properties │ └── pom.xml │ ├── frontend/ │ └── task-management-angular/ │ ├── src/ │ │ ├── app/ │ │ │ ├── components/ │ │ │ ├── services/ │ │ │ ├── models/ │ │ │ └── app.module.ts │ └── angular.json │ └── README.md ``` </pre>
 
 ## 🔐 Xác thực & Phân quyền
 
