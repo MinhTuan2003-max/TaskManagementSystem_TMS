@@ -1,7 +1,6 @@
 package com.luv2code.springboot.demo.tsm.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
-@Data
 public class User implements UserDetails {
 
     @Id
@@ -83,12 +81,22 @@ public class User implements UserDetails {
         this.fullName = fullName;
     }
 
-    // UserDetails implementation
+    // ✅ IMPLEMENT TẤT CẢ ABSTRACT METHODS CỦA UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
                 .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
     }
 
     @Override
@@ -111,17 +119,14 @@ public class User implements UserDetails {
         return enabled;
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getUsername() { return username; }
     public void setUsername(String username) { this.username = username; }
 
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
-    public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
 
     public String getFullName() { return fullName; }
@@ -129,6 +134,14 @@ public class User implements UserDetails {
 
     public String getAvatarUrl() { return avatarUrl; }
     public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
+
+    public void setEnabled(boolean enabled) { this.enabled = enabled; }
+
+    public void setAccountNonExpired(boolean accountNonExpired) { this.accountNonExpired = accountNonExpired; }
+
+    public void setAccountNonLocked(boolean accountNonLocked) { this.accountNonLocked = accountNonLocked; }
+
+    public void setCredentialsNonExpired(boolean credentialsNonExpired) { this.credentialsNonExpired = credentialsNonExpired; }
 
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
