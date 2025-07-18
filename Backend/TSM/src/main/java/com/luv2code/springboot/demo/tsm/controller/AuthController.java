@@ -34,12 +34,6 @@ public class AuthController {
     private final JwtUtils jwtUtils;
     private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserService userService) {
-        this.authenticationManager = authenticationManager;
-        this.jwtUtils = jwtUtils;
-        this.userService = userService;
-    }
-
     @Operation(summary = "User login", description = "Authenticate user and return JWT token")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Login successful",
@@ -64,6 +58,12 @@ public class AuthController {
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(new JwtResponse(jwt, user.getUsername(), user.getEmail(), roles));
+    }
+
+    public AuthController(AuthenticationManager authenticationManager, JwtUtils jwtUtils, UserService userService) {
+        this.authenticationManager = authenticationManager;
+        this.jwtUtils = jwtUtils;
+        this.userService = userService;
     }
 
     @Operation(summary = "User registration", description = "Register a new user account")
