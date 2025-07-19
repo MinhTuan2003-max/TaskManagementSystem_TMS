@@ -52,16 +52,16 @@ export const routes: Routes = [
   },
 
   // Error pages
-  // {
-  //   path: 'unauthorized',
-  //   loadComponent: () => import('./shared/components/unauthorized/unauthorized.component').then(c => c.UnauthorizedComponent),
-  //   title: 'Unauthorized'
-  // },
-  // {
-  //   path: 'not-found',
-  //   loadComponent: () => import('./shared/components/not-found/not-found.component').then(c => c.NotFoundComponent),
-  //   title: 'Page Not Found'
-  // },
+  {
+    path: 'unauthorized',
+    loadComponent: () => import('./shared/modules/components/unauthorized/unauthorized').then(c => c.Unauthorized),
+    title: 'Unauthorized'
+  },
+  {
+    path: 'not-found',
+    loadComponent: () => import('./shared/modules/components/not-found/not-found').then(c => c.NotFound),
+    title: 'Page Not Found'
+  },
 
   // Wildcard route - phải ở cuối
   {
