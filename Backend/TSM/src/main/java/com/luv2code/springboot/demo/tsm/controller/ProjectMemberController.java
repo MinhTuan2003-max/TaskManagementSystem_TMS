@@ -23,8 +23,9 @@ public class ProjectMemberController {
     @Autowired
     private ProjectMemberService projectMemberService;
 
+    // Chỉ Manager có thể mời thành viên
     @PostMapping
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<ProjectMember> addMember(@PathVariable Long projectId,
                                                    @Valid @RequestBody AddMemberRequest request,
                                                    Authentication authentication) {
@@ -38,9 +39,9 @@ public class ProjectMemberController {
         return ResponseEntity.ok(member);
     }
 
-
+    // Chỉ Manager có thể cập nhật vai trò thành viên
     @PutMapping("/{userId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<ProjectMember> updateMemberRole(@PathVariable Long projectId,
                                                           @PathVariable Long userId,
                                                           @RequestBody Map<String, ProjectRole> request) {
@@ -49,23 +50,26 @@ public class ProjectMemberController {
         return ResponseEntity.ok(member);
     }
 
+    // Chỉ Manager có thể xóa thành viên
     @DeleteMapping("/{userId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<Void> removeMember(@PathVariable Long projectId,
                                              @PathVariable Long userId) {
         projectMemberService.removeMemberFromProject(projectId, userId);
         return ResponseEntity.noContent().build();
     }
 
+    // Tất cả thành viên dự án có thể xem danh sách (bao gồm User)
     @GetMapping
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<List<ProjectMember>> getProjectMembers(@PathVariable Long projectId) {
         List<ProjectMember> members = projectMemberService.getProjectMembers(projectId);
         return ResponseEntity.ok(members);
     }
 
+    // Chỉ Manager có thể xem danh sách admin
     @GetMapping("/admins")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<List<ProjectMember>> getProjectAdmins(@PathVariable Long projectId) {
         List<ProjectMember> admins = projectMemberService.getProjectAdmins(projectId);
         return ResponseEntity.ok(admins);

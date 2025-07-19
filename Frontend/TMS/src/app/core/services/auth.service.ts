@@ -114,7 +114,6 @@ export class AuthService {
     this.redirectUrl = url;
   }
 
-  // ✅ Thêm method để get dashboard mặc định theo role
   private getDefaultDashboard(): string {
     const user = this.getCurrentUserValue();
     if (!user) return '/dashboard';

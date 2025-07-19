@@ -149,7 +149,6 @@ public class UserService {
         userRepository.save(user);
     }
 
-    // ✅ Basic user stats
     public UserStatsResponse getUserStats() {
         long totalUsers = userRepository.count();
         long activeUsers = userRepository.countByEnabled(true);
@@ -160,7 +159,7 @@ public class UserService {
         return new UserStatsResponse(totalUsers, activeUsers, newUsersThisMonth);
     }
 
-    // ✅ Admin statistics với đúng DTO class
+    // Admin statistics với đúng DTO class
     public AdminUserStatsResponse getAdminUserStats() {
         long totalUsers = userRepository.count();
         long activeUsers = userRepository.countByEnabledTrueAndAccountNonLockedTrue();

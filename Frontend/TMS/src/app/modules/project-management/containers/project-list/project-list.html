@@ -1,0 +1,61 @@
+<div class="project-list-container">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Dự án của tôi</h1>
+      <p class="text-gray-600 mt-2">Quản lý và theo dõi các dự án của bạn</p>
+    </div>
+    <button
+      (click)="toggleCreateForm()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      Tạo dự án mới
+    </button>
+  </div>
+
+  <!-- Create Form -->
+  <div *ngIf="showForm" class="mb-8">
+    <app-project-form
+      [project]="selectedProject"
+      [isSubmitting]="isSubmitting"
+      (submit)="onFormSubmit($event)"
+      (cancel)="onFormCancel()">
+    </app-project-form>
+  </div>
+
+  <!-- Projects Grid -->
+  <div *ngIf="!isLoading && projects.length > 0"
+       class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <app-project-card
+      *ngFor="let project of projects"
+      [project]="project"
+      [stats]="getProjectStats(project.id)"
+      [canEdit]="canEditProject(project)"
+      [canDelete]="canDeleteProject(project)"
+      (edit)="onEditProject($event)"
+      (delete)="onDeleteProject($event)"
+      (viewDetail)="onViewDetail($event)">
+    </app-project-card>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && projects.length === 0" class="text-center py-12">
+    <svg class="w-24 h-24 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+    </svg>
+    <h3 class="text-xl font-medium text-gray-900 mb-2">Chưa có dự án nào</h3>
+    <p class="text-gray-500 mb-6">Bắt đầu bằng cách tạo dự án đầu tiên của bạn</p>
+    <button
+      (click)="toggleCreateForm()"
+      class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+      Tạo dự án đầu tiên
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center py-12">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+  </div>
+</div>

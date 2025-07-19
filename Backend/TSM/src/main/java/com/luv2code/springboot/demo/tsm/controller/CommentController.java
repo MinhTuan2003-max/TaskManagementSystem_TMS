@@ -22,8 +22,9 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    // Tất cả authenticated users có thể tạo comment
     @PostMapping
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('MEMBER') or hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<Comment> createComment(@Valid @RequestBody CreateCommentRequest request,
                                                  Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -31,31 +32,39 @@ public class CommentController {
         return ResponseEntity.ok(comment);
     }
 
+    // Tất cả authenticated users có thể update comment (với ownership check trong service)
     @PutMapping("/{commentId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<Comment> updateComment(@PathVariable Long commentId,
-                                                 @RequestBody Map<String, String> request) {
+                                                 @RequestBody Map<String, String> request,
+                                                 Authentication authentication) {
         String newContent = request.get("content");
-        Comment comment = commentService.updateComment(commentId, newContent);
+        User user = (User) authentication.getPrincipal();
+        Comment comment = commentService.updateComment(commentId, newContent, user.getId());
         return ResponseEntity.ok(comment);
     }
 
+    // Tất cả authenticated users có thể delete comment (với ownership check trong service)
     @DeleteMapping("/{commentId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId) {
-        commentService.deleteComment(commentId);
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long commentId,
+                                              Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        commentService.deleteComment(commentId, user.getId());
         return ResponseEntity.noContent().build();
     }
 
+    // Tất cả authenticated users có thể xem comments của task
     @GetMapping("/task/{taskId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<List<Comment>> getCommentsByTask(@PathVariable Long taskId) {
         List<Comment> comments = commentService.getCommentsByTask(taskId);
         return ResponseEntity.ok(comments);
     }
 
+    // Tất cả authenticated users có thể xem comment count
     @GetMapping("/task/{taskId}/count")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<Long> getCommentCount(@PathVariable Long taskId) {
         Long count = commentService.getCommentCount(taskId);
         return ResponseEntity.ok(count);

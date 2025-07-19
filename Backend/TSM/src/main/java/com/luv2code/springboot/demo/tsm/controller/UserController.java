@@ -26,7 +26,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/me")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
     public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         UserResponse userResponse = convertToUserResponse(user);
@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
     public ResponseEntity<UserResponse> updateCurrentUser(@Valid @RequestBody UpdateUserRequest request,
                                                           Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
         User user = userService.findById(userId);
         UserResponse userResponse = convertToUserResponse(user);
@@ -62,13 +62,13 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public ResponseEntity<List<UserResponse>> searchUsers(@RequestParam String keyword) {
-        List<User> users = userService.searchUsers(keyword);
-        List<UserResponse> userResponses = users.stream()
+    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
+    public ResponseEntity<List<UserResponse>> searchUsers(@RequestParam String query) {
+        List<User> users = userService.searchUsers(query);
+        List<UserResponse> response = users.stream()
                 .map(this::convertToUserResponse)
                 .collect(Collectors.toList());
-        return ResponseEntity.ok(userResponses);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/{userId}/status")
@@ -88,7 +88,7 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
     public ResponseEntity<MessageResponse> changePassword(@Valid @RequestBody ChangePasswordRequest request,
                                                           Authentication authentication) {
         User user = (User) authentication.getPrincipal();

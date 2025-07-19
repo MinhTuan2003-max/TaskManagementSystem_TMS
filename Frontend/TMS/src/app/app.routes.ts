@@ -40,7 +40,7 @@ export const routes: Routes = [
     path: 'dashboard/owner',
     component: OwnerDashboardComponent,
     canActivate: [AuthGuard],
-    data: { roles: ['ROLE_OWNER', 'ROLE_MANAGER'] },
+    data: { roles: ['ROLE_MANAGER'] },
     title: 'Owner Dashboard'
   },
   {
@@ -58,6 +58,14 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     data: { roles: ['ROLE_ADMIN'] },
     title: 'Admin User Management'
+  },
+
+  //Project routes
+  {
+    path: 'projects',
+    loadChildren: () => import('./modules/project-management/project-management-routing.module').then(m => m.ProjectManagementRoutingModule),
+    canActivate: [AuthGuard],
+    title: 'Project Management'
   },
 
   // Error pages

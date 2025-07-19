@@ -8,6 +8,7 @@ import com.luv2code.springboot.demo.tsm.entity.enumerator.TaskStatus;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,8 @@ public class TaskService {
     private ProjectService projectService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private ProjectMemberService projectMemberService;
 
     public Task createTask(CreateTaskRequest request, Long creatorId) {
         User creator = userService.findById(creatorId);
@@ -55,19 +58,26 @@ public class TaskService {
         return savedTask;
     }
 
-    public Task updateTask(Long taskId, CreateTaskRequest request) {
+    public Task updateTask(Long taskId, CreateTaskRequest request, Long userId) {
         Task task = findById(taskId);
 
+        // Security check: Kiểm tra quyền chỉnh sửa
+        if (!canManageTask(task, userId)) {
+            throw new AccessDeniedException("Không có quyền chỉnh sửa task này");
+        }
+
+        // Update task fields
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
         task.setPriority(request.getPriority());
         task.setDeadline(request.getDeadline());
 
+        // Update assignee if provided
         if (request.getAssigneeId() != null) {
             User assignee = userService.findById(request.getAssigneeId());
             task.setAssignee(assignee);
-        } else {
-            task.setAssignee(null);
+
+            notificationService.createTaskAssignedNotification(task, assignee);
         }
 
         return taskRepository.save(task);
@@ -92,9 +102,27 @@ public class TaskService {
         return updatedTask;
     }
 
-    public void deleteTask(Long taskId) {
+    public void deleteTask(Long taskId, Long userId) {
         Task task = findById(taskId);
+
+        // Security check: Kiểm tra quyền xóa
+        if (!canManageTask(task, userId)) {
+            throw new AccessDeniedException("Không có quyền xóa task này");
+        }
+
         taskRepository.delete(task);
+    }
+
+    private boolean canManageTask(Task task, Long userId) {
+        if (task.getCreator().getId().equals(userId)) {
+            return true;
+        }
+
+        if (task.getProject().getOwner().getId().equals(userId)) {
+            return true;
+        }
+
+        return projectMemberService.isUserProjectManager(task.getProject().getId(), userId);
     }
 
     public Task findById(Long taskId) {

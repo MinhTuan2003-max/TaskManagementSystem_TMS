@@ -17,6 +17,9 @@ import {
   KanbanBoard
 } from '../models';
 import {environment} from '../../../environments/environment';
+import {InviteMemberRequest, ProjectFormData, ProjectStats} from '../models/project-management.models';
+import {ProjectService} from './project.service';
+import {UserSearchService} from './user-search.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +27,11 @@ import {environment} from '../../../environments/environment';
 export class ApiService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private projectService: ProjectService,
+    private userSearchService: UserSearchService
+  ) {}
 
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('jwt_token');
@@ -59,12 +66,8 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
-  searchUsers(keyword: string): Observable<User[]> {
-    const params = new HttpParams().set('keyword', keyword);
-    return this.http.get<User[]>(`${this.apiUrl}/users/search`, {
-      headers: this.getHeaders(),
-      params
-    }).pipe(catchError(this.handleError));
+  searchUsers(query: string): Observable<User[]> {
+    return this.userSearchService.searchUsers(query);
   }
 
   // Project APIs
@@ -73,14 +76,12 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
-  getProject(projectId: number): Observable<Project> {
-    return this.http.get<Project>(`${this.apiUrl}/projects/${projectId}`, { headers: this.getHeaders() })
-      .pipe(catchError(this.handleError));
+  getProject(id: number): Observable<Project> {
+    return this.projectService.getProject(id);
   }
 
-  createProject(projectData: any): Observable<Project> {
-    return this.http.post<Project>(`${this.apiUrl}/projects`, projectData, { headers: this.getHeaders() })
-      .pipe(catchError(this.handleError));
+  createProject(projectData: ProjectFormData): Observable<Project> {
+    return this.projectService.createProject(projectData);
   }
 
   updateProject(projectId: number, projectData: any): Observable<Project> {
@@ -152,8 +153,9 @@ export class ApiService {
 
   // Project Member APIs
   getProjectMembers(projectId: number): Observable<ProjectMember[]> {
-    return this.http.get<ProjectMember[]>(`${this.apiUrl}/projects/${projectId}/members`, { headers: this.getHeaders() })
-      .pipe(catchError(this.handleError));
+    return this.http.get<ProjectMember[]>(`${this.apiUrl}/projects/${projectId}/members`, {
+      headers: this.getHeaders()
+    });
   }
 
   addProjectMember(projectId: number, memberData: AddMemberRequest): Observable<ProjectMember> {
@@ -170,6 +172,35 @@ export class ApiService {
     return this.http.delete<void>(`${this.apiUrl}/projects/${projectId}/members/${userId}`, { headers: this.getHeaders() })
       .pipe(catchError(this.handleError));
   }
+
+  // Project APIs
+  getMyProjects(): Observable<Project[]> {
+    return this.projectService.getMyProjects();
+  }
+
+  inviteMember(request: InviteMemberRequest): Observable<ProjectMember> {
+    const backendRequest = {
+      userId: request.userId,
+      role: request.role
+    };
+    return this.http.post<ProjectMember>(`${this.apiUrl}/projects/${request.projectId}/members`, backendRequest, {
+      headers: this.getHeaders()
+    });
+  }
+
+  removeMember(projectId: number, userId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/projects/${projectId}/members/${userId}`, {
+      headers: this.getHeaders()
+    });
+  }
+
+  getProjectStats(projectId: number): Observable<ProjectStats> {
+    return this.http.get<ProjectStats>(`${this.apiUrl}/projects/${projectId}/stats`, {
+      headers: this.getHeaders()
+    });
+  }
+
+
 
   private handleError(error: any): Observable<never> {
     console.error('API Error:', error);

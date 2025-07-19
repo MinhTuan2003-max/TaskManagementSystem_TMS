@@ -61,6 +61,15 @@ public class ProjectMemberService {
         projectMemberRepository.deleteByProjectIdAndUserId(projectId, userId);
     }
 
+    public boolean isUserProjectManager(Long projectId, Long userId) {
+        Optional<ProjectMember> memberOpt = projectMemberRepository
+                .findByProjectIdAndUserId(projectId, userId);
+
+        return memberOpt.isPresent() &&
+                (memberOpt.get().getRole() == ProjectRole.MANAGER ||
+                        memberOpt.get().getRole() == ProjectRole.ADMIN);
+    }
+
     public List<ProjectMember> getProjectMembers(Long projectId) {
         return projectMemberRepository.findByProjectIdWithUser(projectId);
     }

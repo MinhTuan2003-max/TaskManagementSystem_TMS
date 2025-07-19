@@ -27,14 +27,12 @@ import java.util.Map;
 @Tag(name = "Notifications", description = "Notification management APIs")
 public class NotificationController {
 
-
     @Autowired
     private NotificationService notificationService;
 
-
-
+    // Tất cả authenticated users có thể xem notifications
     @GetMapping
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @Operation(summary = "Get user notifications with pagination")
     public ResponseEntity<Page<Notification>> getNotifications(
             @RequestParam(defaultValue = "0") int page,
@@ -48,8 +46,9 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
+    // Tất cả authenticated users có thể xem unread notifications
     @GetMapping("/unread")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @Operation(summary = "Get unread notifications")
     public ResponseEntity<List<Notification>> getUnreadNotifications(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -57,8 +56,9 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
+    // Tất cả authenticated users có thể xem unread count
     @GetMapping("/unread/count")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @Operation(summary = "Get unread notification count")
     public ResponseEntity<Map<String, Long>> getUnreadCount(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -66,8 +66,9 @@ public class NotificationController {
         return ResponseEntity.ok(Map.of("count", count));
     }
 
+    // Tất cả authenticated users có thể filter notifications by type
     @GetMapping("/type/{type}")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @Operation(summary = "Get notifications by type")
     public ResponseEntity<List<Notification>> getNotificationsByType(
             @PathVariable NotificationType type,
@@ -77,8 +78,9 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
+    // Tất cả authenticated users có thể filter notifications by date
     @GetMapping("/date-range")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @Operation(summary = "Get notifications by date range")
     public ResponseEntity<List<Notification>> getNotificationsByDateRange(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
@@ -89,8 +91,9 @@ public class NotificationController {
         return ResponseEntity.ok(notifications);
     }
 
+    // Tất cả authenticated users có thể mark as read
     @PutMapping("/{notificationId}/read")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @Operation(summary = "Mark notification as read")
     public ResponseEntity<Map<String, String>> markAsRead(@PathVariable Long notificationId, Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -98,8 +101,9 @@ public class NotificationController {
         return ResponseEntity.ok(Map.of("message", "Notification marked as read"));
     }
 
+    // Tất cả authenticated users có thể mark all as read
     @PutMapping("/read-all")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @Operation(summary = "Mark all notifications as read")
     public ResponseEntity<Map<String, String>> markAllAsRead(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -107,8 +111,9 @@ public class NotificationController {
         return ResponseEntity.ok(Map.of("message", "All notifications marked as read"));
     }
 
+    // Tất cả authenticated users có thể xem settings
     @GetMapping("/settings")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @Operation(summary = "Get user notification settings")
     public ResponseEntity<NotificationSettings> getNotificationSettings(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -116,8 +121,9 @@ public class NotificationController {
         return ResponseEntity.ok(settings);
     }
 
+    // Tất cả authenticated users có thể update settings
     @PutMapping("/settings")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
     @Operation(summary = "Update notification settings")
     public ResponseEntity<NotificationSettings> updateNotificationSettings(
             @RequestBody NotificationSettings settings,
@@ -126,6 +132,4 @@ public class NotificationController {
         NotificationSettings updatedSettings = notificationService.updateUserSettings(user.getId(), settings);
         return ResponseEntity.ok(updatedSettings);
     }
-
-
 }
