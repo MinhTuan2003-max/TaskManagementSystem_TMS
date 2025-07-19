@@ -1,0 +1,162 @@
+<div class="bg-white rounded-xl shadow border border-gray-200 overflow-hidden">
+    <!-- Header -->
+    <div class="bg-gray-50 border-b border-gray-200 p-5">
+        <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-gray-800">
+                Người dùng ({{ totalUsers }})
+            </h3>
+            <div class="flex items-center gap-4"> <!-- Tăng khoảng cách giữa select và nút -->
+                <div class="flex items-center gap-2">
+                    <label class="text-sm font-medium text-gray-700">Chọn hành động:</label>
+                    <select
+                            [(ngModel)]="selectedAction"
+                            class="px-3 py-2 pr-7 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-100 disabled:text-gray-400"
+                            [disabled]="selectedUsers.size === 0"
+                    >
+                        <option value="">Thao tác hàng loạt</option>
+                        <option value="enable">Kích hoạt đã chọn</option>
+                        <option value="disable">Vô hiệu hóa đã chọn</option>
+                        <option value="lock">Khóa đã chọn</option>
+                        <option value="unlock">Mở khóa đã chọn</option>
+                    </select>
+                </div>
+                <button
+                        (click)="performBulkAction()"
+                        [disabled]="!selectedAction || selectedUsers.size === 0"
+                        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+                >
+                    Áp dụng
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200 text-sm">
+            <thead class="bg-gray-100">
+                <tr class="text-gray-600 uppercase tracking-wider text-xs">
+                    <th class="w-10 px-6 py-3 text-left">
+                        <input
+                                type="checkbox"
+                                [checked]="isAllSelected"
+                                [indeterminate]="isPartialSelected"
+                                (change)="toggleSelectAll($event)"
+                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        >
+                    </th>
+                    <th class="px-6 py-3 text-left">Thông tin</th>
+                    <th class="px-6 py-3 text-left">Trạng thái</th>
+                    <th class="px-6 py-3 text-left">Vai trò</th>
+                    <th class="px-6 py-3 text-left">Ngày tạo</th>
+                    <th class="px-6 py-3 text-left">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-gray-100">
+                <tr *ngFor="let user of users; trackBy: trackByUserId"
+                    class="hover:bg-gray-50 transition"
+                    [class.bg-blue-50]="selectedUsers.has(user.id)">
+                    <!-- Checkbox -->
+                    <td class="px-6 py-4">
+                        <input
+                                type="checkbox"
+                                [checked]="selectedUsers.has(user.id)"
+                                (change)="toggleUserSelection(user.id, $event)"
+                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                        >
+                    </td>
+
+                    <!-- User Info -->
+                    <td class="px-6 py-4">
+                        <div class="flex items-center">
+                            <div class="h-10 w-10 rounded-full overflow-hidden">
+                                <img *ngIf="user.avatarUrl" [src]="user.avatarUrl" [alt]="user.fullName" class="h-full w-full object-cover">
+                                <div *ngIf="!user.avatarUrl" class="h-full w-full bg-gray-300 flex items-center justify-center text-sm text-gray-700 font-semibold">
+                                    {{ getInitials(user.fullName) }}
+                                </div>
+                            </div>
+                            <div class="ml-3 space-y-0.5">
+                                <div class="font-medium text-gray-900">{{ user.fullName }}</div>
+                                <div class="text-gray-500">{{ user.email }}</div>
+                                <div class="text-xs text-gray-400">&#64;{{ user.username }}</div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <!-- Status -->
+                    <td class="px-6 py-4">
+                        <div class="flex flex-col gap-1">
+              <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    [ngClass]="getStatusBadgeClass(user)">
+                {{ getUserStatusText(user) }}
+              </span>
+                            <span *ngIf="!user.accountNonLocked"
+                                  class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">
+                <i class="fas fa-lock mr-1"></i> Đã khóa
+              </span>
+                        </div>
+                    </td>
+
+                    <!-- Roles -->
+                    <td class="px-6 py-4">
+                        <div class="space-y-2">
+                            <div class="flex flex-wrap gap-1">
+                <span *ngFor="let role of user.roles"
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                      [ngClass]="getRoleBadgeClass(role)">
+                  {{ getRoleDisplayName(role) }}
+                </span>
+                            </div>
+                            <select
+                                    [value]="getPrimaryRole(user)"
+                                    (change)="onRoleChange(user, $event)"
+                                    class="mt-1 text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500 w-full"
+                            >
+                                <option value="ROLE_USER">Người dùng</option>
+                                <option value="ROLE_MANAGER">Quản lý</option>
+                                <option value="ROLE_ADMIN">Quản trị viên</option>
+                            </select>
+                        </div>
+                    </td>
+
+                    <!-- Created At -->
+                    <td class="px-6 py-4 text-gray-500 whitespace-nowrap">
+                        {{ user.createdAt | date:'dd/MM/yyyy' }}
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="px-6 py-4">
+                        <div class="flex flex-wrap gap-1">
+                            <button *ngIf="user.accountNonLocked" (click)="onAction('lock', user)" class="action-btn hover:text-red-600" title="Khóa">
+                                <i class="fas fa-lock"></i>
+                            </button>
+                            <button *ngIf="!user.accountNonLocked" (click)="onAction('unlock', user)" class="action-btn hover:text-green-600" title="Mở khóa">
+                                <i class="fas fa-unlock"></i>
+                            </button>
+                            <button *ngIf="user.enabled" (click)="onAction('disable', user)" class="action-btn hover:text-orange-600" title="Vô hiệu hóa">
+                                <i class="fas fa-ban"></i>
+                            </button>
+                            <button *ngIf="!user.enabled" (click)="onAction('enable', user)" class="action-btn hover:text-green-600" title="Kích hoạt">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                            <button (click)="onAction('resetPassword', user)" class="action-btn hover:text-purple-600" title="Đặt lại mật khẩu">
+                                <i class="fas fa-key"></i>
+                            </button>
+                            <button (click)="onAction('delete', user)" class="action-btn hover:text-red-600" title="Xóa">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="users.length === 0" class="text-center py-12 text-gray-500">
+        <div class="mx-auto h-12 w-12 text-gray-400 mb-4">
+            <i class="fas fa-users text-4xl"></i>
+        </div>
+        <p class="text-sm">Không tìm thấy người dùng nào</p>
+    </div>
+</div>

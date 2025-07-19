@@ -2,9 +2,14 @@ package com.luv2code.springboot.demo.tsm.dto.request;
 
 import com.luv2code.springboot.demo.tsm.entity.enumerator.ProjectRole;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class AddMemberRequest {
 
+    // Getters and Setters
     @NotNull(message = "User ID is required")
     private Long userId;
 
@@ -19,10 +24,4 @@ public class AddMemberRequest {
         this.role = role;
     }
 
-    // Getters and Setters
-    public Long getUserId() { return userId; }
-    public void setUserId(Long userId) { this.userId = userId; }
-
-    public ProjectRole getRole() { return role; }
-    public void setRole(ProjectRole role) { this.role = role; }
 }

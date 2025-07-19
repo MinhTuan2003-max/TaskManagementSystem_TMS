@@ -1,8 +1,14 @@
 package com.luv2code.springboot.demo.tsm.dto.response;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
 
+@Setter
+@Getter
 public class ApiResponse<T> {
+    // Getters and setters
     private boolean success;
     private String message;
     private T data;
@@ -32,19 +38,4 @@ public class ApiResponse<T> {
         return new ApiResponse<>(false, message, null);
     }
 
-    // Getters and setters
-    public boolean isSuccess() { return success; }
-    public void setSuccess(boolean success) { this.success = success; }
-
-    public String getMessage() { return message; }
-    public void setMessage(String message) { this.message = message; }
-
-    public T getData() { return data; }
-    public void setData(T data) { this.data = data; }
-
-    public LocalDateTime getTimestamp() { return timestamp; }
-    public void setTimestamp(LocalDateTime timestamp) { this.timestamp = timestamp; }
-
-    public int getStatus() { return status; }
-    public void setStatus(int status) { this.status = status; }
 }

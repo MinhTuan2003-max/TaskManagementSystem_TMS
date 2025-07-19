@@ -1,7 +1,10 @@
 package com.luv2code.springboot.demo.tsm.controller;
 
+import com.luv2code.springboot.demo.tsm.dto.request.ChangePasswordRequest;
 import com.luv2code.springboot.demo.tsm.dto.request.UpdateUserRequest;
+import com.luv2code.springboot.demo.tsm.dto.response.MessageResponse;
 import com.luv2code.springboot.demo.tsm.dto.response.UserResponse;
+import com.luv2code.springboot.demo.tsm.dto.response.UserStatsResponse;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.service.UserService;
 import jakarta.validation.Valid;
@@ -100,7 +103,6 @@ public class UserController {
         return ResponseEntity.ok(stats);
     }
 
-    // Helper method to convert User entity to UserResponse DTO
     private UserResponse convertToUserResponse(User user) {
         UserResponse response = new UserResponse();
         response.setId(user.getId());
@@ -118,49 +120,5 @@ public class UserController {
         response.setRoles(roles);
 
         return response;
-    }
-
-    // Inner classes for requests and responses
-    public static class MessageResponse {
-        private String message;
-
-        public MessageResponse(String message) {
-            this.message = message;
-        }
-
-        public String getMessage() { return message; }
-        public void setMessage(String message) { this.message = message; }
-    }
-
-    public static class ChangePasswordRequest {
-        private String oldPassword;
-        private String newPassword;
-
-        public String getOldPassword() { return oldPassword; }
-        public void setOldPassword(String oldPassword) { this.oldPassword = oldPassword; }
-
-        public String getNewPassword() { return newPassword; }
-        public void setNewPassword(String newPassword) { this.newPassword = newPassword; }
-    }
-
-    public static class UserStatsResponse {
-        private long totalUsers;
-        private long activeUsers;
-        private long newUsersThisMonth;
-
-        public UserStatsResponse(long totalUsers, long activeUsers, long newUsersThisMonth) {
-            this.totalUsers = totalUsers;
-            this.activeUsers = activeUsers;
-            this.newUsersThisMonth = newUsersThisMonth;
-        }
-
-        public long getTotalUsers() { return totalUsers; }
-        public void setTotalUsers(long totalUsers) { this.totalUsers = totalUsers; }
-
-        public long getActiveUsers() { return activeUsers; }
-        public void setActiveUsers(long activeUsers) { this.activeUsers = activeUsers; }
-
-        public long getNewUsersThisMonth() { return newUsersThisMonth; }
-        public void setNewUsersThisMonth(long newUsersThisMonth) { this.newUsersThisMonth = newUsersThisMonth; }
     }
 }

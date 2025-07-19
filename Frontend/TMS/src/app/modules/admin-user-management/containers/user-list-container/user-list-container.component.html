@@ -1,0 +1,331 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+  <!-- Enhanced Header -->
+  <div class="sticky top-0 z-40 border-b border-white/20 backdrop-blur-xl bg-white/80">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div class="flex items-center justify-between">
+        <!-- Left Section -->
+        <div class="flex items-center space-x-6">
+          <button
+            (click)="goBack()"
+            class="group inline-flex items-center px-4 py-2.5 text-sm font-medium text-slate-600
+                   bg-white/80 backdrop-blur-sm border border-slate-200/50 rounded-xl
+                   hover:bg-white hover:text-slate-900 hover:border-slate-300
+                   hover:shadow-lg hover:-translate-x-0.5
+                   focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-300
+                   transition-all duration-300 ease-out"
+          >
+            <svg class="w-5 h-5 mr-2 transition-transform group-hover:-translate-x-1"
+                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Quay lại
+          </button>
+
+          <div class="flex flex-col">
+            <h1 class="text-3xl font-bold bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent">
+              Quản lý người dùng
+            </h1>
+            <p class="text-slate-600 text-sm font-medium mt-1">
+              Quản lý tài khoản và phân quyền người dùng trong hệ thống
+            </p>
+          </div>
+        </div>
+
+        <!-- Right Section -->
+        <button
+          (click)="refreshData()"
+          [disabled]="loading"
+          class="group relative inline-flex items-center px-6 py-2.5 text-sm font-semibold text-white
+                 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl
+                 hover:from-blue-700 hover:to-indigo-700 hover:shadow-lg hover:shadow-blue-500/25
+                 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none
+                 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:ring-offset-2
+                 transition-all duration-300 overflow-hidden"
+        >
+          <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0
+                      translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000"></div>
+
+          <svg *ngIf="loading" class="animate-spin w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"/>
+          </svg>
+          <svg *ngIf="!loading" class="w-5 h-5 mr-2 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+          </svg>
+          <span class="relative">{{ loading ? 'Đang tải...' : 'Làm mới' }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <!-- Enhanced Stats Cards -->
+    <div *ngIf="userStats" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <!-- Total Users Card -->
+      <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-slate-50
+                  border border-slate-200/60 shadow-sm hover:shadow-xl hover:shadow-slate-200/40
+                  hover:-translate-y-1 transition-all duration-500">
+        <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-indigo-500/5"></div>
+        <div class="relative p-6">
+          <div class="flex items-center justify-between">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl
+                          flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197"/>
+                </svg>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-medium text-slate-600">Tổng số người dùng</p>
+              <p class="text-3xl font-bold text-slate-900 mt-1">
+                {{ userStats.totalUsers | number }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Users Card -->
+      <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-green-50/30
+                  border border-slate-200/60 shadow-sm hover:shadow-xl hover:shadow-green-200/40
+                  hover:-translate-y-1 transition-all duration-500">
+        <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-emerald-500/5"></div>
+        <div class="relative p-6">
+          <div class="flex items-center justify-between">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-gradient-to-br from-green-100 to-green-200 rounded-xl
+                          flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-medium text-slate-600">Đang hoạt động</p>
+              <p class="text-3xl font-bold text-green-600 mt-1">
+                {{ userStats.activeUsers | number }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Locked Users Card -->
+      <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-red-50/30
+                  border border-slate-200/60 shadow-sm hover:shadow-xl hover:shadow-red-200/40
+                  hover:-translate-y-1 transition-all duration-500">
+        <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 to-rose-500/5"></div>
+        <div class="relative p-6">
+          <div class="flex items-center justify-between">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-gradient-to-br from-red-100 to-red-200 rounded-xl
+                          flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-medium text-slate-600">Tài khoản bị khóa</p>
+              <p class="text-3xl font-bold text-red-600 mt-1">
+                {{ userStats.lockedUsers | number }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- New Users Card -->
+      <div class="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white to-purple-50/30
+                  border border-slate-200/60 shadow-sm hover:shadow-xl hover:shadow-purple-200/40
+                  hover:-translate-y-1 transition-all duration-500">
+        <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-violet-500/5"></div>
+        <div class="relative p-6">
+          <div class="flex items-center justify-between">
+            <div class="flex-shrink-0">
+              <div class="w-12 h-12 bg-gradient-to-br from-purple-100 to-purple-200 rounded-xl
+                          flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                </svg>
+              </div>
+            </div>
+            <div class="text-right">
+              <p class="text-sm font-medium text-slate-600">Mới tháng này</p>
+              <p class="text-3xl font-bold text-purple-600 mt-1">
+                {{ userStats.newUsersThisMonth | number }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Enhanced Filters -->
+    <div class="backdrop-blur-xl bg-white/20 border border-white/20 rounded-2xl shadow-lg">
+      <div class="p-6">
+        <form [formGroup]="filterForm" class="space-y-6">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Search Field -->
+              <div class="md:col-span-2">
+                  <label class="block text-sm font-semibold text-slate-700 mb-3">
+                      Tìm kiếm
+                  </label>
+                  <div class="relative group">
+                      <!-- Icon tìm kiếm -->
+                      <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                          <i class="fas fa-magnifying-glass text-gray-400 group-focus-within:text-blue-500 transition-colors text-base"></i>
+                      </div>
+
+                      <!-- Input -->
+                      <input
+                              type="text"
+                              formControlName="search"
+                              placeholder="Tìm theo tên, email hoặc username..."
+                              class="block w-full pl-11 pr-4 py-3 text-sm border border-gray-300 rounded-xl
+             bg-white placeholder-gray-400 text-gray-800
+             focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400
+             transition-all duration-300"
+                      />
+                  </div>
+              </div>
+
+              <!-- Status Filter -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-3">
+                Trạng thái
+              </label>
+              <select
+                formControlName="status"
+                class="block w-full px-4 py-3 text-sm border border-slate-200/60 rounded-xl
+                       bg-white/50 backdrop-blur-sm focus:bg-white
+                       focus:outline-none focus:ring-2 focus:ring-blue-500/20
+                       focus:border-blue-400 transition-all duration-300"
+              >
+                <option value="">Tất cả trạng thái</option>
+                <option value="active">Hoạt động</option>
+                <option value="disabled">Đã vô hiệu hóa</option>
+                <option value="locked">Đã khóa</option>
+              </select>
+            </div>
+
+            <!-- Role Filter -->
+            <div>
+              <label class="block text-sm font-semibold text-slate-700 mb-3">
+                Vai trò
+              </label>
+              <select
+                formControlName="role"
+                class="block w-full px-4 py-3 text-sm border border-slate-200/60 rounded-xl
+                       bg-white/50 backdrop-blur-sm focus:bg-white
+                       focus:outline-none focus:ring-2 focus:ring-blue-500/20
+                       focus:border-blue-400 transition-all duration-300"
+              >
+                <option value="">Tất cả vai trò</option>
+                <option value="ROLE_ADMIN">Quản trị viên</option>
+                <option value="ROLE_MANAGER">Quản lý</option>
+                <option value="ROLE_USER">Người dùng</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Clear Filters Button -->
+          <div class="flex justify-end pt-4 border-t border-slate-200/60">
+            <button
+              type="button"
+              (click)="clearFilters()"
+              class="inline-flex items-center px-6 py-2.5 text-sm font-medium text-slate-600
+                     bg-slate-100/80 backdrop-blur-sm border border-slate-200/60 rounded-xl
+                     hover:bg-slate-200/80 hover:text-slate-900
+                     focus:outline-none focus:ring-2 focus:ring-slate-400/20 focus:ring-offset-2
+                     transition-all duration-300"
+            >
+              <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+              </svg>
+              Xóa bộ lọc
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div class="mt-8">
+
+    <!-- User Table -->
+    <app-user-table
+      [users]="filteredUsers"
+      [totalUsers]="totalUsers"
+      [loading]="loading"
+      (actionPerformed)="onUserAction($event)"
+      (bulkActionPerformed)="onBulkAction($event)"
+      (roleChanged)="onRoleChange($event)"
+    ></app-user-table>
+
+    <!-- Enhanced Pagination -->
+    <div *ngIf="totalPages > 1" class="mt-8">
+      <div class="backdrop-blur-xl bg-white/80 border border-white/30 rounded-2xl shadow-lg p-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0">
+          <div class="text-sm font-medium text-slate-600">
+            Hiển thị <span class="font-bold text-slate-900">{{ getStartIndex() }}</span> đến
+            <span class="font-bold text-slate-900">{{ getEndIndex() }}</span> của
+            <span class="font-bold text-slate-900">{{ totalUsers | number }}</span> kết quả
+          </div>
+
+          <div class="flex items-center space-x-2">
+            <button
+              (click)="previousPage()"
+              [disabled]="currentPage === 0"
+              class="group relative px-4 py-2 text-sm font-semibold text-slate-600
+                   bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-xl
+                   hover:bg-white hover:text-slate-900 hover:border-slate-300 hover:shadow-lg
+                   disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-none
+                   focus:outline-none focus:ring-2 focus:ring-blue-500/20
+                   transition-all duration-300"
+            >
+              <svg class="w-4 h-4 mr-1 transition-transform group-hover:-translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+              </svg>
+              Trước
+            </button>
+
+            <div class="flex space-x-1">
+              <button
+                *ngFor="let page of getVisiblePages()"
+                (click)="goToPage(page)"
+                class="w-10 h-10 text-sm font-semibold rounded-xl transition-all duration-300
+                     focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                [class]="page === currentPage
+                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-lg shadow-blue-500/25'
+                : 'text-slate-600 bg-white/80 backdrop-blur-sm border border-slate-200/60 hover:bg-white hover:border-slate-300 hover:shadow-lg'"
+              >
+                {{ page + 1 }}
+              </button>
+            </div>
+
+            <button
+              (click)="nextPage()"
+              [disabled]="currentPage >= totalPages - 1"
+              class="group relative px-4 py-2 text-sm font-semibold text-slate-600
+                   bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-xl
+                   hover:bg-white hover:text-slate-900 hover:border-slate-300 hover:shadow-lg
+                   disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:shadow-none
+                   focus:outline-none focus:ring-2 focus:ring-blue-500/20
+                   transition-all duration-300"
+            >
+              Sau
+              <svg class="w-4 h-4 ml-1 transition-transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,7 @@
+.action-btn {
+  @apply p-2 text-gray-500 hover:bg-gray-100 rounded-md transition;
+}
+
+select {
+  transition: border-color 0.2s, box-shadow 0.2s;
+}

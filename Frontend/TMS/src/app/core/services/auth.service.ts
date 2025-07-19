@@ -30,7 +30,16 @@ export class AuthService {
         tap(response => {
           if (this.isBrowser()) {
             localStorage.setItem('jwt_token', response.token);
-            this.loadCurrentUser();
+            this.getCurrentUser().subscribe({
+              next: user => {
+                this.currentUserSubject.next(user);
+                this.redirectAfterLogin();
+              },
+              error: err => {
+                console.error('Error loading user after login', err);
+                this.logout();
+              }
+            });
           }
         }),
         catchError(this.handleError)

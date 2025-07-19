@@ -51,3 +51,45 @@ export interface MessageResponse {
   message: string;
 }
 
+export interface UserStats {
+  totalUsers: number;
+  activeUsers: number;
+  lockedUsers: number;
+  newUsersThisMonth: number;
+  usersByRole: {
+    admin: number;
+    manager: number;
+    user: number;
+  }
+}
+
+export interface UpdateUserRequest {
+  username?: string;
+  email?: string;
+  fullName?: string;
+  enabled?: boolean;
+  roles?: string[];
+}
+
+export interface UserPageResponse {
+  content: User[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+  first: boolean;
+  last: boolean;
+}
+
+export interface CreateUserRequest {
+  username: string;
+  email: string;
+  password: string;
+  fullName: string;
+  roles?: string[];
+}
+
+export interface ResetPasswordResponse {
+  message: string;
+  temporaryPassword: string;
+}

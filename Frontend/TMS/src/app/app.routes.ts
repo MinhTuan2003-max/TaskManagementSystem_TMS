@@ -51,6 +51,15 @@ export const routes: Routes = [
     title: 'Member Dashboard'
   },
 
+  // Admin routes
+  {
+    path: 'admin/users',
+    loadChildren: () => import('./modules/admin-user-management/admin-user-management-routing.module').then(m => m.AdminUserManagementRoutingModule),
+    canActivate: [AuthGuard],
+    data: { roles: ['ROLE_ADMIN'] },
+    title: 'Admin User Management'
+  },
+
   // Error pages
   {
     path: 'unauthorized',

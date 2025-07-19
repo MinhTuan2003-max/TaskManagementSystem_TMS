@@ -2,9 +2,14 @@ package com.luv2code.springboot.demo.tsm.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class UpdateUserRequest {
 
+    // Getters and Setters
     @NotBlank(message = "Full name is required")
     private String fullName;
 
@@ -22,13 +27,4 @@ public class UpdateUserRequest {
         this.avatarUrl = avatarUrl;
     }
 
-    // Getters and Setters
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getAvatarUrl() { return avatarUrl; }
-    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
 }

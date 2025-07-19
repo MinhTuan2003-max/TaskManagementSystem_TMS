@@ -2,9 +2,14 @@ package com.luv2code.springboot.demo.tsm.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.Setter;
 
+@Setter
+@Getter
 public class CreateCommentRequest {
 
+    // Getters and Setters
     @NotBlank(message = "Content is required")
     private String content;
 
@@ -19,10 +24,4 @@ public class CreateCommentRequest {
         this.taskId = taskId;
     }
 
-    // Getters and Setters
-    public String getContent() { return content; }
-    public void setContent(String content) { this.content = content; }
-
-    public Long getTaskId() { return taskId; }
-    public void setTaskId(Long taskId) { this.taskId = taskId; }
 }
