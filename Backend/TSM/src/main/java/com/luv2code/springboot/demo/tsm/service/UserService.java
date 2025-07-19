@@ -1,7 +1,7 @@
 package com.luv2code.springboot.demo.tsm.service;
 
 import com.luv2code.springboot.demo.tsm.controller.UserController;
-import com.luv2code.springboot.demo.tsm.dto.UpdateUserRequest;
+import com.luv2code.springboot.demo.tsm.dto.request.UpdateUserRequest;
 import com.luv2code.springboot.demo.tsm.entity.Role;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.repository.RoleRepository;

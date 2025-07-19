@@ -30,11 +30,19 @@ public class ProjectService {
         return projectRepository.save(project);
     }
 
-    public Project updateProject(Long projectId, String name, String description) {
+    public Project updateProject(Long projectId, UpdateProjectRequest request, Long userId) {
         Project project = findById(projectId);
-        project.setName(name);
-        project.setDescription(description);
-        return projectRepository.save(project);
+        User actor = userService.findById(userId);
+
+        project.setName(request.getName());
+        project.setDescription(request.getDescription());
+
+        Project updatedProject = projectRepository.save(project);
+
+        // Tạo notification
+        notificationService.createProjectUpdatedNotification(updatedProject, actor);
+
+        return updatedProject;
     }
 
     public void deleteProject(Long projectId) {

@@ -1,6 +1,6 @@
 package com.luv2code.springboot.demo.tsm.controller;
 
-import com.luv2code.springboot.demo.tsm.dto.AddMemberRequest;
+import com.luv2code.springboot.demo.tsm.dto.request.AddMemberRequest;
 import com.luv2code.springboot.demo.tsm.entity.ProjectMember;
 import com.luv2code.springboot.demo.tsm.entity.enumerator.ProjectRole;
 import com.luv2code.springboot.demo.tsm.service.ProjectMemberService;

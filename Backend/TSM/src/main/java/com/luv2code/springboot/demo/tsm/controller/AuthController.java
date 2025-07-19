@@ -1,9 +1,9 @@
 package com.luv2code.springboot.demo.tsm.controller;
 
 import com.luv2code.springboot.demo.tsm.config.JwtUtils;
-import com.luv2code.springboot.demo.tsm.dto.JwtResponse;
-import com.luv2code.springboot.demo.tsm.dto.LoginRequest;
-import com.luv2code.springboot.demo.tsm.dto.RegisterRequest;
+import com.luv2code.springboot.demo.tsm.dto.response.JwtResponse;
+import com.luv2code.springboot.demo.tsm.dto.request.LoginRequest;
+import com.luv2code.springboot.demo.tsm.dto.request.RegisterRequest;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;

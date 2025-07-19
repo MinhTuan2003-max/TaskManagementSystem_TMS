@@ -1,6 +1,6 @@
 package com.luv2code.springboot.demo.tsm.controller;
 
-import com.luv2code.springboot.demo.tsm.dto.CreateCommentRequest;
+import com.luv2code.springboot.demo.tsm.dto.request.CreateCommentRequest;
 import com.luv2code.springboot.demo.tsm.entity.Comment;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.service.CommentService;

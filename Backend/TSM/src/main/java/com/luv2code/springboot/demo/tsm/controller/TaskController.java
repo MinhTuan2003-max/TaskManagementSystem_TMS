@@ -1,6 +1,6 @@
 package com.luv2code.springboot.demo.tsm.controller;
 
-import com.luv2code.springboot.demo.tsm.dto.CreateTaskRequest;
+import com.luv2code.springboot.demo.tsm.dto.request.CreateTaskRequest;
 import com.luv2code.springboot.demo.tsm.dto.KanbanBoard;
 import com.luv2code.springboot.demo.tsm.entity.Task;
 import com.luv2code.springboot.demo.tsm.entity.enumerator.TaskStatus;

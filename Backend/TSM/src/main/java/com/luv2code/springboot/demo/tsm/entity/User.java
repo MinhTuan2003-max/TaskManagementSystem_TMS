@@ -81,7 +81,6 @@ public class User implements UserDetails {
         this.fullName = fullName;
     }
 
-    // ✅ IMPLEMENT TẤT CẢ ABSTRACT METHODS CỦA UserDetails
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()

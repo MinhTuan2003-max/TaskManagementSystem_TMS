@@ -1,6 +1,6 @@
 package com.luv2code.springboot.demo.tsm.service;
 
-import com.luv2code.springboot.demo.tsm.dto.CreateTaskRequest;
+import com.luv2code.springboot.demo.tsm.dto.request.CreateTaskRequest;
 import com.luv2code.springboot.demo.tsm.dto.KanbanBoard;
 import com.luv2code.springboot.demo.tsm.entity.Project;
 import com.luv2code.springboot.demo.tsm.entity.Task;
@@ -26,6 +26,8 @@ public class TaskService {
 
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private NotificationService notificationService;
 
     public Task createTask(CreateTaskRequest request, Long creatorId) {
         User creator = userService.findById(creatorId);
@@ -44,7 +46,13 @@ public class TaskService {
             task.setAssignee(assignee);
         }
 
-        return taskRepository.save(task);
+        Task savedTask = taskRepository.save(task);
+
+        if (savedTask.getAssignee() != null) {
+            notificationService.createTaskAssignedNotification(savedTask, creator);
+        }
+
+        return savedTask;
     }
 
     public Task updateTask(Long taskId, CreateTaskRequest request) {
@@ -65,10 +73,23 @@ public class TaskService {
         return taskRepository.save(task);
     }
 
-    public Task updateTaskStatus(Long taskId, TaskStatus newStatus) {
+    public Task updateTaskStatus(Long taskId, TaskStatus newStatus, Long userId) {
         Task task = findById(taskId);
+        TaskStatus oldStatus = task.getStatus();
+
         task.setStatus(newStatus);
-        return taskRepository.save(task);
+        Task updatedTask = taskRepository.save(task);
+
+        task.setStatus(newStatus);
+        User actor = userService.findById(userId);
+        notificationService.createTaskStatusChangedNotification(updatedTask, actor, oldStatus);
+
+        // Nếu task completed, tạo notification riêng
+        if (newStatus == TaskStatus.DONE && oldStatus != TaskStatus.DONE) {
+            notificationService.createTaskCompletedNotification(updatedTask, actor);
+        }
+
+        return updatedTask;
     }
 
     public void deleteTask(Long taskId) {

@@ -1,5 +1,6 @@
 package com.luv2code.springboot.demo.tsm.service;
 
+import com.luv2code.springboot.demo.tsm.dto.request.CreateCommentRequest;
 import com.luv2code.springboot.demo.tsm.entity.Comment;
 import com.luv2code.springboot.demo.tsm.entity.Task;
 import com.luv2code.springboot.demo.tsm.entity.User;
@@ -23,12 +24,19 @@ public class CommentService {
     @Autowired
     private UserService userService;
 
-    public Comment createComment(String content, Long taskId, Long authorId) {
-        Task task = taskService.findById(taskId);
+    public Comment createComment(CreateCommentRequest request, Long authorId) {
+        Task task = taskService.findById(request.getTaskId());
         User author = userService.findById(authorId);
 
-        Comment comment = new Comment(content, task, author);
-        return commentRepository.save(comment);
+        Comment comment = new Comment();
+        comment.setContent(request.getContent());
+        comment.setTask(task);
+        comment.setAuthor(author);
+
+        Comment savedComment = commentRepository.save(comment);
+
+        notificationService.createCommentAddedNotification(savedComment, author);
+        return savedComment;
     }
 
     public Comment updateComment(Long commentId, String newContent) {

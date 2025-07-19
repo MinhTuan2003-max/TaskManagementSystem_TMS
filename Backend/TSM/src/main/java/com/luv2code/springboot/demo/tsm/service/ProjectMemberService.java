@@ -24,10 +24,14 @@ public class ProjectMemberService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private NotificationService notificationService;
 
-    public ProjectMember addMemberToProject(Long projectId, Long userId, ProjectRole role) {
+    public ProjectMember addMemberToProject(Long projectId, Long userId, ProjectRole role, Long currentUserId) {
         Project project = projectService.findById(projectId);
         User user = userService.findById(userId);
+        User newMember = userService.findById(userId);
+        User actor = userService.findById(currentUserId);
 
         // Check if user is already a member
         if (projectMemberRepository.existsByProjectIdAndUserId(projectId, userId)) {
@@ -35,7 +39,10 @@ public class ProjectMemberService {
         }
 
         ProjectMember member = new ProjectMember(project, user, role);
-        return projectMemberRepository.save(member);
+
+        ProjectMember savedMember = projectMemberRepository.save(member);
+        notificationService.createProjectMemberAddedNotification(project, newMember, actor);
+        return savedMember;
     }
 
     public ProjectMember updateMemberRole(Long projectId, Long userId, ProjectRole newRole) {
