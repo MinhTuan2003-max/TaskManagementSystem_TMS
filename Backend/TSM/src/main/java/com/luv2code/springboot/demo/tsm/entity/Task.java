@@ -1,5 +1,6 @@
 package com.luv2code.springboot.demo.tsm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.luv2code.springboot.demo.tsm.entity.enumerator.Priority;
 import com.luv2code.springboot.demo.tsm.entity.enumerator.TaskStatus;
 import jakarta.persistence.*;
@@ -36,17 +37,21 @@ public class Task {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
+    @JsonIgnoreProperties({"tasks", "members"})
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "assignee_id")
+    @JsonIgnoreProperties({"assignedTasks", "createdTasks", "ownedProjects"})
     private User assignee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id")
+    @JsonIgnoreProperties({"assignedTasks", "createdTasks", "ownedProjects"})
     private User creator;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnoreProperties({"task"})
     private List<Comment> comments = new ArrayList<>();
 
     @CreationTimestamp

@@ -1,5 +1,7 @@
 package com.luv2code.springboot.demo.tsm.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -60,15 +62,19 @@ public class User implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
+    @JsonIgnoreProperties("users")
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "owner")
+    @JsonIgnore
     private List<Project> ownedProjects = new ArrayList<>();
 
-    @OneToMany(mappedBy = "assignee", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "assignee")
+    @JsonIgnore
     private List<Task> assignedTasks = new ArrayList<>();
 
-    @OneToMany(mappedBy = "creator", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "creator")
+    @JsonIgnore
     private List<Task> createdTasks = new ArrayList<>();
 
     // Constructors
