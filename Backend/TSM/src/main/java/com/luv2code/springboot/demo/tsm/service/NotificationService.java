@@ -200,10 +200,6 @@ public class NotificationService {
         );
     }
 
-    // ===========================================
-    // NOTIFICATION RETRIEVAL METHODS
-    // ===========================================
-
     public Page<Notification> getUserNotifications(Long userId, Pageable pageable) {
         return notificationRepository.findByRecipientIdWithActorOrderByCreatedAtDesc(userId, pageable);
     }
@@ -224,10 +220,6 @@ public class NotificationService {
         return notificationRepository.findByRecipientIdAndDateRange(userId, startDate, endDate);
     }
 
-    // ===========================================
-    // MARK AS READ METHODS
-    // ===========================================
-
     public void markAsRead(Long notificationId, Long userId) {
         int updated = notificationRepository.markAsReadById(notificationId, userId);
 
@@ -246,9 +238,8 @@ public class NotificationService {
         }
     }
 
-    // ===========================================
-    // NOTIFICATION SETTINGS METHODS
-    // ===========================================
+
+
 
     public NotificationSettings getUserSettings(Long userId) {
         return settingsRepository.findByUserId(userId)
@@ -407,10 +398,6 @@ public class NotificationService {
             System.err.println("Failed to send all notifications read update: " + e.getMessage());
         }
     }
-
-    // ===========================================
-    // CLEANUP METHODS
-    // ===========================================
 
     @Transactional
     public void cleanupOldNotifications() {

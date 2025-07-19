@@ -44,11 +44,14 @@ public class TaskController {
     @PutMapping("/{taskId}/status")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Task> updateTaskStatus(@PathVariable Long taskId,
-                                                 @RequestBody Map<String, TaskStatus> request) {
+                                                 @RequestBody Map<String, TaskStatus> request,
+                                                 Authentication authentication) {
         TaskStatus status = request.get("status");
-        Task task = taskService.updateTaskStatus(taskId, status);
+        User currentUser = (User) authentication.getPrincipal();
+        Task task = taskService.updateTaskStatus(taskId, status, currentUser.getId());
         return ResponseEntity.ok(task);
     }
+
 
     @DeleteMapping("/{taskId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")

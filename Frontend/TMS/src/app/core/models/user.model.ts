@@ -28,7 +28,7 @@ export interface RegisterRequest {
   fullName: string;
 }
 
-export interface UpdateUserRequest {
+export interface UpdateProfileRequest {
   fullName: string;
   email: string;
   avatarUrl?: string;
@@ -50,3 +50,4 @@ export interface LoginResponse {
 export interface MessageResponse {
   message: string;
 }
+

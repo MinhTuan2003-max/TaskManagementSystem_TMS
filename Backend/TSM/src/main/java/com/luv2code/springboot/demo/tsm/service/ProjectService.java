@@ -1,5 +1,6 @@
 package com.luv2code.springboot.demo.tsm.service;
 
+import com.luv2code.springboot.demo.tsm.dto.request.UpdateProjectRequest;
 import com.luv2code.springboot.demo.tsm.entity.Project;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.repository.ProjectRepository;
@@ -18,6 +19,8 @@ public class ProjectService {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private NotificationService notificationService;
 
     public Project createProject(String name, String description, Long ownerId) {
         User owner = userService.findById(ownerId);

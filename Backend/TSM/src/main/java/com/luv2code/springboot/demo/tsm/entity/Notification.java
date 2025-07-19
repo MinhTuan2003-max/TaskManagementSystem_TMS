@@ -1,5 +1,7 @@
 package com.luv2code.springboot.demo.tsm.entity;
 
+import com.luv2code.springboot.demo.tsm.entity.enumerator.EntityType;
+import com.luv2code.springboot.demo.tsm.entity.enumerator.NotificationType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

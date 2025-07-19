@@ -1,5 +1,6 @@
 package com.luv2code.springboot.demo.tsm.controller;
 
+import com.luv2code.springboot.demo.tsm.dto.request.UpdateProjectRequest;
 import com.luv2code.springboot.demo.tsm.entity.Project;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.service.ProjectService;
@@ -20,6 +21,7 @@ public class ProjectController {
     @Autowired
     private ProjectService projectService;
 
+
     @PostMapping
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Project> createProject(@Valid @RequestBody CreateProjectRequest request,
@@ -32,10 +34,13 @@ public class ProjectController {
     @PutMapping("/{projectId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<Project> updateProject(@PathVariable Long projectId,
-                                                 @Valid @RequestBody CreateProjectRequest request) {
-        Project project = projectService.updateProject(projectId, request.getName(), request.getDescription());
+                                                 @Valid @RequestBody UpdateProjectRequest request,
+                                                 Authentication authentication) {
+        User user = (User) authentication.getPrincipal();
+        Project project = projectService.updateProject(projectId, request, user.getId());
         return ResponseEntity.ok(project);
     }
+
 
     @DeleteMapping("/{projectId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")

@@ -1,10 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
+
 import { LoginFormComponent } from '../../components/login-form/login-form';
 import { AuthLogoComponent } from '../../components/auth-logo/auth-logo';
-import {AuthService} from '../../../../core/services/auth.service';
 import {NotificationService} from '../../../../core/services/notification.service';
+import {AuthService} from '../../../../core/services/auth.service';
 import {LoginRequest} from '../../../../core/models';
 
 @Component({
@@ -30,7 +31,7 @@ export class LoginContainerComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.authService.isAuthenticated()) {
-      this.router.navigate(['/dashboard']);
+      this.authService.redirectAfterLogin();
     }
   }
 
@@ -38,11 +39,12 @@ export class LoginContainerComponent implements OnInit {
     this.authService.login(credentials).subscribe({
       next: (response) => {
         this.notificationService.showSuccess('Login successful! Welcome back.');
-        this.router.navigate(['/dashboard']);
+
+        this.authService.redirectAfterLogin();
       },
       error: (error) => {
         this.loginForm.setLoading(false);
-        const errorMessage = error.error?.message || 'Login failed. Please check your credentials.';
+        const errorMessage = error.message || 'Login failed. Please check your credentials.';
         this.notificationService.showError(errorMessage);
       }
     });

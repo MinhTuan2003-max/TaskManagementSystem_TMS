@@ -2,12 +2,14 @@ package com.luv2code.springboot.demo.tsm.controller;
 
 import com.luv2code.springboot.demo.tsm.dto.request.AddMemberRequest;
 import com.luv2code.springboot.demo.tsm.entity.ProjectMember;
+import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.entity.enumerator.ProjectRole;
 import com.luv2code.springboot.demo.tsm.service.ProjectMemberService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,10 +26,18 @@ public class ProjectMemberController {
     @PostMapping
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public ResponseEntity<ProjectMember> addMember(@PathVariable Long projectId,
-                                                   @Valid @RequestBody AddMemberRequest request) {
-        ProjectMember member = projectMemberService.addMemberToProject(projectId, request.getUserId(), request.getRole());
+                                                   @Valid @RequestBody AddMemberRequest request,
+                                                   Authentication authentication) {
+        User currentUser = (User) authentication.getPrincipal();
+        ProjectMember member = projectMemberService.addMemberToProject(
+                projectId,
+                request.getUserId(),
+                request.getRole(),
+                currentUser.getId()
+        );
         return ResponseEntity.ok(member);
     }
+
 
     @PutMapping("/{userId}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")

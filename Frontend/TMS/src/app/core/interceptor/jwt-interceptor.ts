@@ -1,19 +1,28 @@
 import { HttpInterceptorFn } from '@angular/common/http';
-import { inject } from '@angular/core';
-import { AuthService } from '../services/auth.service';
 
 export const jwtInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
-  const token = authService.getToken();
+  if (typeof window !== 'undefined' && typeof localStorage !== 'undefined') {
+    const token = localStorage.getItem('jwt_token');
 
-  if (token && !req.url.includes('/auth/')) {
-    const cloned = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-    return next(cloned);
+    if (token && !req.url.includes('/auth/') && !isTokenExpired(token)) {
+      const cloned = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return next(cloned);
+    }
   }
 
   return next(req);
 };
+
+function isTokenExpired(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    const currentTime = Date.now() / 1000;
+    return payload.exp < currentTime;
+  } catch {
+    return true;
+  }
+}

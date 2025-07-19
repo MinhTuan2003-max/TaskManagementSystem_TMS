@@ -1,0 +1,31 @@
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.notification-item {
+  transition: all 0.2s ease-in-out;
+}
+
+.notification-item:hover {
+  transform: translateX(2px);
+}
+
+.notification-dropdown-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.notification-dropdown-content::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.notification-dropdown-content::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 2px;
+}
+
+.notification-dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

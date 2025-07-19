@@ -24,6 +24,9 @@ public class CommentService {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public Comment createComment(CreateCommentRequest request, Long authorId) {
         Task task = taskService.findById(request.getTaskId());
         User author = userService.findById(authorId);

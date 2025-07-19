@@ -27,8 +27,11 @@ import java.util.Map;
 @Tag(name = "Notifications", description = "Notification management APIs")
 public class NotificationController {
 
+
     @Autowired
     private NotificationService notificationService;
+
+
 
     @GetMapping
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
@@ -104,10 +107,6 @@ public class NotificationController {
         return ResponseEntity.ok(Map.of("message", "All notifications marked as read"));
     }
 
-    // ===========================================
-    // NOTIFICATION SETTINGS ENDPOINTS
-    // ===========================================
-
     @GetMapping("/settings")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     @Operation(summary = "Get user notification settings")
@@ -127,4 +126,6 @@ public class NotificationController {
         NotificationSettings updatedSettings = notificationService.updateUserSettings(user.getId(), settings);
         return ResponseEntity.ok(updatedSettings);
     }
+
+
 }

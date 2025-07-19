@@ -27,7 +27,7 @@ public class CommentController {
     public ResponseEntity<Comment> createComment(@Valid @RequestBody CreateCommentRequest request,
                                                  Authentication authentication) {
         User user = (User) authentication.getPrincipal();
-        Comment comment = commentService.createComment(request.getContent(), request.getTaskId(), user.getId());
+        Comment comment = commentService.createComment(request, user.getId());
         return ResponseEntity.ok(comment);
     }
 
