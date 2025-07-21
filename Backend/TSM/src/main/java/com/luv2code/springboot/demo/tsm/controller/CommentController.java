@@ -24,7 +24,7 @@ public class CommentController {
 
     // Tất cả authenticated users có thể tạo comment
     @PostMapping
-    @PreAuthorize("hasRole('MEMBER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<Comment> createComment(@Valid @RequestBody CreateCommentRequest request,
                                                  Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -34,7 +34,7 @@ public class CommentController {
 
     // Tất cả authenticated users có thể update comment (với ownership check trong service)
     @PutMapping("/{commentId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<Comment> updateComment(@PathVariable Long commentId,
                                                  @RequestBody Map<String, String> request,
                                                  Authentication authentication) {
@@ -46,7 +46,7 @@ public class CommentController {
 
     // Tất cả authenticated users có thể delete comment (với ownership check trong service)
     @DeleteMapping("/{commentId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<Void> deleteComment(@PathVariable Long commentId,
                                               Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -56,7 +56,7 @@ public class CommentController {
 
     // Tất cả authenticated users có thể xem comments của task
     @GetMapping("/task/{taskId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<List<Comment>> getCommentsByTask(@PathVariable Long taskId) {
         List<Comment> comments = commentService.getCommentsByTask(taskId);
         return ResponseEntity.ok(comments);
@@ -64,7 +64,7 @@ public class CommentController {
 
     // Tất cả authenticated users có thể xem comment count
     @GetMapping("/task/{taskId}/count")
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<Long> getCommentCount(@PathVariable Long taskId) {
         Long count = commentService.getCommentCount(taskId);
         return ResponseEntity.ok(count);

@@ -13,7 +13,7 @@ export interface ProjectMember {
 
 
 export enum ProjectRole {
-  OWNER = 'OWNER',
+  MANAGER = 'MANAGER',
   ADMIN = 'ADMIN',
   MEMBER = 'MEMBER'
 }

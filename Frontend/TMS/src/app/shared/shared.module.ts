@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 
 import { MaterialModule } from './modules/material.module';
 import { PrimeNGModule } from './modules/primeng.module';
-import { PipesModule } from './pipes/pipes.module';
 import {ComponentsModule} from './modules/components/components.module';
 
 @NgModule({
@@ -17,8 +16,7 @@ import {ComponentsModule} from './modules/components/components.module';
     RouterModule,
     MaterialModule,
     PrimeNGModule,
-    ComponentsModule,
-    PipesModule
+    ComponentsModule
   ],
   exports: [
     CommonModule,
@@ -27,8 +25,7 @@ import {ComponentsModule} from './modules/components/components.module';
     RouterModule,
     MaterialModule,
     PrimeNGModule,
-    ComponentsModule,
-    PipesModule
+    ComponentsModule
   ]
 })
 export class SharedModule { }

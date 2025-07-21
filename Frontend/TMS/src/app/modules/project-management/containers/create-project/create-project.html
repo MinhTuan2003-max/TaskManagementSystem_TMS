@@ -1,0 +1,164 @@
+<div class="min-h-screen bg-gray-50">
+  <!-- Header Section -->
+  <div class="bg-white shadow-sm border-b border-gray-200">
+    <div class="container mx-auto px-4 py-6">
+      <div class="flex items-center">
+        <button
+          (click)="goBack()"
+          class="mr-4 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full transition-all duration-200">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+        <div class="flex items-center">
+          <div>
+            <h1 class="text-3xl font-bold text-gray-900">Tạo dự án mới</h1>
+            <p class="text-gray-600 mt-1">Tạo dự án mới để bắt đầu quản lý công việc hiệu quả</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="flex-1 py-8">
+    <div class="container mx-auto px-4 max-w-4xl">
+      <!-- Breadcrumb -->
+      <nav class="flex mb-8 text-sm bg-white rounded-lg px-4 py-3 shadow-sm">
+        <a routerLink="/dashboard/owner" class="text-blue-600 hover:text-blue-800 flex items-center">
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2 2v10"></path>
+          </svg>
+          Dashboard
+        </a>
+        <svg class="w-4 h-4 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <a routerLink="/projects" class="text-blue-600 hover:text-blue-800 flex items-center">
+          <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+          </svg>
+          Dự án
+        </a>
+        <svg class="w-4 h-4 mx-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+        <span class="text-gray-900 font-medium">Tạo mới</span>
+      </nav>
+
+      <!-- Two-Column Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Left Column - Form -->
+        <div class="lg:col-span-2">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-8">
+            <div class="mb-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-2">Thông tin dự án</h2>
+              <p class="text-gray-600 text-sm">Điền thông tin cơ bản để tạo dự án mới của bạn</p>
+            </div>
+
+            <app-project-form
+              [isSubmitting]="isSubmitting"
+              (submit)="onFormSubmit($event)"
+              (cancel)="onCancel()">
+            </app-project-form>
+          </div>
+        </div>
+
+        <!-- Right Column - Tips & Info -->
+        <div class="lg:col-span-1">
+          <!-- Tips Card -->
+          <div class="bg-blue-50 rounded-xl border border-blue-200 p-6 mb-6">
+            <div class="flex items-center mb-4">
+              <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+              </div>
+              <h3 class="font-semibold text-blue-900">Mẹo tạo dự án</h3>
+            </div>
+            <ul class="space-y-3 text-sm text-blue-800">
+              <li class="flex items-start">
+                <svg class="w-4 h-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Chọn tên dự án ngắn gọn và dễ nhớ</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="w-4 h-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Mô tả rõ ràng mục tiêu của dự án</span>
+              </li>
+              <li class="flex items-start">
+                <svg class="w-4 h-4 text-blue-600 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Bạn có thể chỉnh sửa thông tin sau khi tạo</span>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Features Preview -->
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="font-semibold text-gray-900 mb-4 flex items-center">
+              <svg class="w-5 h-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              Tính năng sẽ có
+            </h3>
+            <div class="space-y-3">
+              <div class="flex items-center text-sm text-gray-600">
+                <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                <span>Quản lý thành viên dự án</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-600">
+                <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                <span>Tạo và phân công tasks</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-600">
+                <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                <span>Theo dõi tiến độ real-time</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-600">
+                <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                <span>Bình luận và thảo luận</span>
+              </div>
+              <div class="flex items-center text-sm text-gray-600">
+                <div class="w-2 h-2 bg-green-400 rounded-full mr-3"></div>
+                <span>Thông báo tự động</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress Steps (Optional) -->
+      <div class="mt-8 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 class="font-semibold text-gray-900 mb-4">Các bước tiếp theo</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+            <div class="w-8 h-8 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mr-3 font-semibold">1</div>
+            <div>
+              <div class="font-medium text-gray-900">Tạo dự án</div>
+              <div class="text-sm text-gray-600">Hoàn thành form này</div>
+            </div>
+          </div>
+          <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+            <div class="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center mr-3 font-semibold">2</div>
+            <div>
+              <div class="font-medium text-gray-900">Mời thành viên</div>
+              <div class="text-sm text-gray-600">Thêm người vào team</div>
+            </div>
+          </div>
+          <div class="flex items-center p-4 bg-gray-50 rounded-lg">
+            <div class="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center mr-3 font-semibold">3</div>
+            <div>
+              <div class="font-medium text-gray-900">Tạo tasks</div>
+              <div class="text-sm text-gray-600">Bắt đầu làm việc</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

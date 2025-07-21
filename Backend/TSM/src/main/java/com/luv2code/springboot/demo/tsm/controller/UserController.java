@@ -5,6 +5,7 @@ import com.luv2code.springboot.demo.tsm.dto.request.UpdateUserRequest;
 import com.luv2code.springboot.demo.tsm.dto.response.MessageResponse;
 import com.luv2code.springboot.demo.tsm.dto.response.UserResponse;
 import com.luv2code.springboot.demo.tsm.dto.response.UserStatsResponse;
+import com.luv2code.springboot.demo.tsm.entity.Role;
 import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.service.UserService;
 import jakarta.validation.Valid;
@@ -26,7 +27,7 @@ public class UserController {
     private UserService userService;
 
     @GetMapping("/me")
-    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<UserResponse> getCurrentUser(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         UserResponse userResponse = convertToUserResponse(user);
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PutMapping("/me")
-    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<UserResponse> updateCurrentUser(@Valid @RequestBody UpdateUserRequest request,
                                                           Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -44,7 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
         User user = userService.findById(userId);
         UserResponse userResponse = convertToUserResponse(user);
@@ -52,7 +53,7 @@ public class UserController {
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         List<User> users = userService.findAll();
         List<UserResponse> userResponses = users.stream()
@@ -62,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<List<UserResponse>> searchUsers(@RequestParam String query) {
         List<User> users = userService.searchUsers(query);
         List<UserResponse> response = users.stream()
@@ -88,7 +89,7 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    @PreAuthorize("hasAnyRole('OWNER', 'MANAGER', 'MEMBER')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<MessageResponse> changePassword(@Valid @RequestBody ChangePasswordRequest request,
                                                           Authentication authentication) {
         User user = (User) authentication.getPrincipal();
@@ -115,7 +116,7 @@ public class UserController {
         response.setUpdatedAt(user.getUpdatedAt());
 
         List<String> roles = user.getRoles().stream()
-                .map(role -> role.getName())
+                .map(Role::getName)
                 .collect(Collectors.toList());
         response.setRoles(roles);
 

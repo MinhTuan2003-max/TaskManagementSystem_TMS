@@ -1,10 +1,12 @@
 package com.luv2code.springboot.demo.tsm.dto.response;
 
+import com.luv2code.springboot.demo.tsm.entity.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -25,5 +27,4 @@ public class UserResponse {
 
     // Constructors
     public UserResponse() {}
-
 }

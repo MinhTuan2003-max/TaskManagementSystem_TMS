@@ -1,7 +1,7 @@
 <div class="min-h-screen bg-gray-50 p-6">
   <!-- Header -->
   <header class="flex justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold">Owner Dashboard</h1>
+    <h1 class="text-3xl font-bold">Manager Dashboard</h1>
     <div class="flex items-center space-x-4">
       <span class="text-gray-700">Hello, {{ username }}</span>
       <app-notification-dropdown></app-notification-dropdown>
@@ -17,8 +17,8 @@
   <!-- Features Grid -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <!-- Create Project -->
-    <a
-      routerLink="/projects/create"
+    <button
+      (click)="createProject()"
       class="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
     >
       <div class="flex items-center mb-4">
@@ -30,11 +30,11 @@
         <h2 class="text-xl font-semibold">Tạo Project</h2>
       </div>
       <p class="text-gray-600">Khởi tạo dự án mới</p>
-    </a>
+    </button>
 
     <!-- My Projects -->
     <a
-      routerLink="/projects"
+      routerLink="/projects/list"
       class="bg-white rounded-lg shadow-md border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
     >
       <div class="flex items-center mb-4">

@@ -1,1 +1,147 @@
-<p>project-detail works!</p>
+<div class="container mx-auto px-4 py-8" *ngIf="project">
+  <!-- Header -->
+  <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <div class="flex items-start justify-between">
+      <div class="flex-1">
+        <div class="flex items-center mb-4">
+          <button
+            (click)="goBack()"
+            class="mr-4 p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-full">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+          <h1 class="text-3xl font-bold text-gray-900">{{ project.name }}</h1>
+        </div>
+        <p class="text-gray-600 mb-4">{{ project.description }}</p>
+
+        <div class="flex items-center space-x-6 text-sm text-gray-500">
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+            </svg>
+            Tạo: {{ formatDate(project.createdAt) }}
+          </div>
+          <div class="flex items-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+            {{ members.length }} thành viên
+          </div>
+        </div>
+      </div>
+
+      <div class="flex space-x-3">
+        <button
+          (click)="showInviteMember = true"
+          class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path>
+          </svg>
+          Mời thành viên
+        </button>
+        <button
+          (click)="viewTasks()"
+          class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors flex items-center">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
+          </svg>
+          Xem Tasks
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Project Stats -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8" *ngIf="stats">
+    <div class="bg-white rounded-lg shadow-md p-6 text-center">
+      <div class="text-3xl font-bold text-blue-600 mb-2">{{ stats.totalTasks }}</div>
+      <div class="text-gray-500">Tổng Tasks</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6 text-center">
+      <div class="text-3xl font-bold text-green-600 mb-2">{{ stats.completedTasks }}</div>
+      <div class="text-gray-500">Hoàn thành</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6 text-center">
+      <div class="text-3xl font-bold text-yellow-600 mb-2">{{ stats.inProgressTasks }}</div>
+      <div class="text-gray-500">Đang làm</div>
+    </div>
+    <div class="bg-white rounded-lg shadow-md p-6 text-center">
+      <div class="text-3xl font-bold text-red-600 mb-2">{{ stats.overdueTasks }}</div>
+      <div class="text-gray-500">Quá hạn</div>
+    </div>
+  </div>
+
+  <!-- Members List -->
+  <div class="bg-white rounded-lg shadow-md p-6">
+    <h2 class="text-xl font-semibold text-gray-900 mb-6">Thành viên dự án</h2>
+
+    <div class="overflow-x-auto">
+      <table class="min-w-full divide-y divide-gray-200">
+        <thead class="bg-gray-50">
+          <tr>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thành viên</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vai trò</th>
+            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tham gia</th>
+            <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Hành động</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white divide-y divide-gray-200">
+          <tr *ngFor="let member of members">
+            <td class="px-6 py-4 whitespace-nowrap">
+              <div class="flex items-center">
+                <img
+                  [src]="'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iMjAiIGZpbGw9IiNEREQiLz48cGF0aCBkPSJNMjAgMTJhNCA0IDAgMCAxIDQgNCA0IDQgMCAwIDEtNCA0IDQgNCAwIDAgMS00LTQgNCA0IDAgMCAxIDQtNFptMCA2YTIgMiAwIDEgMCAwLTQgMiAyIDAgMCAwIDAgNFptLTcgMTBhNyA3IDAgMCAxIDE0IDBIMTNaIiBmaWxsPSIjOTk5Ii8+PC9zdmc+'"
+                  [alt]="getUserName(member)"
+                  class="h-10 w-10 rounded-full mr-3">
+                <div>
+                  <div class="text-sm font-medium text-gray-900">{{ getUserName(member) }}</div>
+                  <div class="text-sm text-gray-500">{{ getUserEmail(member) }}</div>
+                </div>
+              </div>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              <span
+                class="px-2 py-1 text-xs font-semibold rounded-full"
+                [ngClass]="getRoleClass(member.role)">
+                {{ getRoleDisplay(member.role) }}
+              </span>
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+              {{ formatDate(member.joinedAt) }}
+            </td>
+            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+              <button
+                *ngIf="canManageMember(member)"
+                (click)="removeMember(member)"
+                class="text-red-600 hover:text-red-900 transition-colors px-2 py-1 rounded hover:bg-red-50">
+                Xóa
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ✅ Empty State when no members -->
+    <div *ngIf="members.length === 0" class="text-center py-8">
+      <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+      </svg>
+      <p class="text-gray-500">Chưa có thành viên nào trong dự án</p>
+    </div>
+  </div>
+
+  <!-- Member Invitation Modal -->
+  <div *ngIf="showInviteMember"
+       class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50 flex items-center justify-center">
+    <div class="relative mx-auto p-4 max-w-2xl w-full">
+      <app-member-invitation
+        [projectId]="project.id"
+        [isSubmitting]="isInviting"
+        (submit)="onInviteMember($event)"
+        (cancel)="showInviteMember = false">
+      </app-member-invitation>
+    </div>
+  </div>
+</div>

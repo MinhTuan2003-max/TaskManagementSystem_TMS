@@ -24,7 +24,6 @@ export class ProjectService {
     });
   }
 
-  // Project CRUD Operations
   getMyProjects(): Observable<Project[]> {
     return this.http.get<Project[]>(`${this.apiUrl}/my-projects`, {
       headers: this.getHeaders()

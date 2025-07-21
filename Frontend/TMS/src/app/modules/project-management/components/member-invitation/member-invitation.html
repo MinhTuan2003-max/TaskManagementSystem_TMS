@@ -1,136 +1,86 @@
-<div class="bg-white rounded-lg shadow-lg p-6">
-  <h3 class="text-xl font-semibold text-gray-900 mb-6">Mời thành viên</h3>
+<div class="bg-white rounded-lg shadow-lg max-w-2xl mx-auto">
+  <div class="px-6 py-4 border-b border-gray-200">
+    <h3 class="text-lg font-medium text-gray-900">Mời thành viên tham gia dự án</h3>
+  </div>
 
-  <form [formGroup]="inviteForm" (ngSubmit)="onSubmit()">
-    <div class="space-y-6">
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">
-          Phương thức mời
-        </label>
-        <div class="flex space-x-4">
-          <label class="flex items-center">
-            <input
-              type="radio"
-              value="email"
-              formControlName="inviteMethod"
-              class="mr-2">
-            <span>Email</span>
-          </label>
-          <label class="flex items-center">
-            <input
-              type="radio"
-              value="userId"
-              formControlName="inviteMethod"
-              class="mr-2">
-            <span>Tìm người dùng</span>
-          </label>
-        </div>
+  <!-- ✅ Fixed: Proper form event handling -->
+  <form [formGroup]="inviteForm" (ngSubmit)="onSubmit($event)" class="px-6 py-4 space-y-6">
+    <!-- User Selection -->
+    <div>
+      <label class="block text-sm font-medium text-gray-700 mb-3">Chọn thành viên</label>
+
+      <!-- Loading State -->
+      <div *ngIf="isLoadingUsers" class="flex items-center justify-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <span class="ml-2 text-gray-600">Đang tải danh sách người dùng...</span>
       </div>
 
-      <div *ngIf="inviteForm.get('inviteMethod')?.value === 'email'">
-        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-          Email *
-        </label>
-        <input
-          type="email"
-          id="email"
-          formControlName="email"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="user@example.com">
-        <div *ngIf="inviteForm.get('email')?.invalid && inviteForm.get('email')?.touched"
-             class="mt-1 text-sm text-red-600">
-          <div *ngIf="inviteForm.get('email')?.errors?.['required']">Email là bắt buộc</div>
-          <div *ngIf="inviteForm.get('email')?.errors?.['email']">Email không hợp lệ</div>
-        </div>
-      </div>
-
-      <div *ngIf="inviteForm.get('inviteMethod')?.value === 'userId'">
-        <label for="userSearch" class="block text-sm font-medium text-gray-700 mb-2">
-          Tìm người dùng *
-        </label>
-        <input
-          type="text"
-          id="userSearch"
-          formControlName="userSearch"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          placeholder="Nhập tên hoặc email để tìm kiếm...">
-
-        <div *ngIf="searchResults.length > 0" class="mt-2 border border-gray-300 rounded-md max-h-60 overflow-y-auto">
-          <div
-            *ngFor="let user of searchResults"
-            (click)="selectUser(user)"
-            class="px-3 py-2 hover:bg-gray-50 cursor-pointer border-b border-gray-200 last:border-b-0">
-            <div class="flex items-center">
+      <!-- Users List -->
+      <div *ngIf="!isLoadingUsers" class="border border-gray-300 rounded-lg max-h-64 overflow-y-auto">
+        <div
+          *ngFor="let user of availableUsers"
+          (click)="onUserSelect(user)"
+          [class]="selectedUser?.id === user.id ? 'bg-blue-50 border-blue-200' : 'hover:bg-gray-50'"
+          class="p-4 border-b border-gray-200 cursor-pointer transition-colors last:border-b-0">
+          <div class="flex items-center">
+            <input
+              type="radio"
+              [checked]="selectedUser?.id === user.id"
+              readonly
+              class="mr-3 text-blue-600">
+            <div class="flex items-center flex-1">
               <img
-                [src]="user.avatarUrl || '/assets/default-avatar.png'"
+                [src]="user.avatarUrl || 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiByeD0iMjAiIGZpbGw9IiNFNUU3RUIiLz48cGF0aCBkPSJNMjAgMTJhNCA0IDAgMCAxIDQgNCA0IDQgMCAwIDEtNCA0IDQgNCAwIDAgMS00LTQgNCA0IDAgMCAxIDQtNFptMCA2YTIgMiAwIDEgMCAwLTQgMiAyIDAgMCAwIDAgNFptLTcgMTBhNyA3IDAgMCAxIDE0IDBIMTNaIiBmaWxsPSIjOUNBM0FGIi8+PC9zdmc+'"
                 [alt]="user.fullName"
-                class="w-8 h-8 rounded-full mr-3">
+                class="h-10 w-10 rounded-full mr-3">
               <div>
-                <div class="font-medium">{{ user.fullName }}</div>
+                <div class="font-medium text-gray-900">{{ user.fullName }}</div>
                 <div class="text-sm text-gray-500">{{ user.email }}</div>
+                <div class="text-xs text-gray-400">{{ user.username }}</div>
               </div>
             </div>
           </div>
         </div>
 
-        <div *ngIf="selectedUser" class="mt-2 p-3 bg-blue-50 rounded-md">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center">
-              <img
-                [src]="selectedUser.avatarUrl || '/assets/default-avatar.png'"
-                [alt]="selectedUser.fullName"
-                class="w-8 h-8 rounded-full mr-3">
-              <div>
-                <div class="font-medium">{{ selectedUser.fullName }}</div>
-                <div class="text-sm text-gray-500">{{ selectedUser.email }}</div>
-              </div>
-            </div>
-            <button
-              type="button"
-              (click)="clearSelectedUser()"
-              class="text-red-600 hover:text-red-800">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-          </div>
+        <!-- Empty State -->
+        <div *ngIf="availableUsers.length === 0" class="p-8 text-center">
+          <p class="text-gray-500">Không có người dùng nào để mời</p>
         </div>
       </div>
 
-      <div>
-        <label for="role" class="block text-sm font-medium text-gray-700 mb-2">
-          Vai trò *
-        </label>
-        <select
-          id="role"
-          formControlName="role"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-          <option value="">Chọn vai trò</option>
-          <option [value]="ProjectRole.MEMBER">Member - Thành viên thông thường</option>
-        </select>
-        <div *ngIf="inviteForm.get('role')?.invalid && inviteForm.get('role')?.touched"
-             class="mt-1 text-sm text-red-600">
-          <div *ngIf="inviteForm.get('role')?.errors?.['required']">Vai trò là bắt buộc</div>
-        </div>
+      <!-- Validation Error -->
+      <div *ngIf="inviteForm.get('userId')?.invalid && inviteForm.get('userId')?.touched"
+           class="mt-2 text-sm text-red-600">
+        Vui lòng chọn một thành viên
       </div>
     </div>
 
-    <div class="flex justify-end space-x-4 mt-8">
+    <!-- Role Selection -->
+    <div>
+      <label for="role" class="block text-sm font-medium text-gray-700 mb-2">Vai trò trong dự án</label>
+      <select
+        id="role"
+        formControlName="role"
+        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+        <option value="MEMBER">Thành viên</option>
+        <option value="MANAGER">Quản lý</option>
+        <option value="ADMIN">Quản trị viên</option>
+      </select>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="flex justify-end space-x-3 pt-4 border-t border-gray-200">
       <button
         type="button"
         (click)="onCancel()"
-        class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
+        class="px-6 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
         Hủy
       </button>
       <button
         type="submit"
-        [disabled]="inviteForm.invalid || isSubmitting"
-        class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center">
-        <svg *ngIf="isSubmitting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        Gửi lời mời
+        [disabled]="!isFormValid || isSubmitting"
+        class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+        {{ isSubmitting ? 'Đang gửi...' : 'Gửi lời mời' }}
       </button>
     </div>
   </form>

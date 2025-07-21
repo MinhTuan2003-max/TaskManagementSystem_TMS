@@ -66,6 +66,18 @@ export class ApiService {
       .pipe(catchError(this.handleError));
   }
 
+  getAllUsers(): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/users`, {
+      headers: this.getHeaders()
+    }).pipe(catchError(this.handleError));
+  }
+
+  getAvailableUsersForProject(projectId: number): Observable<User[]> {
+    return this.http.get<User[]>(`${this.apiUrl}/projects/${projectId}/available-users`, {
+      headers: this.getHeaders()
+    }).pipe(catchError(this.handleError));
+  }
+
   searchUsers(query: string): Observable<User[]> {
     return this.userSearchService.searchUsers(query);
   }
@@ -199,8 +211,6 @@ export class ApiService {
       headers: this.getHeaders()
     });
   }
-
-
 
   private handleError(error: any): Observable<never> {
     console.error('API Error:', error);

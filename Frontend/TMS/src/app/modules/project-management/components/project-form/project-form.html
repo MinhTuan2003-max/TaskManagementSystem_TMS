@@ -1,64 +1,93 @@
-<div class="max-w-2xl mx-auto bg-white rounded-lg shadow-lg p-6">
-  <h2 class="text-2xl font-bold text-gray-900 mb-6">
-    {{ isEditMode ? 'Chỉnh sửa dự án' : 'Tạo dự án mới' }}
-  </h2>
+<form [formGroup]="projectForm" (ngSubmit)="onSubmit()" class="space-y-6">
+  <div *ngIf="isEditMode && formHasChanges"
+       class="flex items-center p-3 bg-amber-50 border border-amber-200 rounded-lg text-amber-800 text-sm">
+    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <span>Có thay đổi chưa lưu</span>
+  </div>
 
-  <form [formGroup]="projectForm" (ngSubmit)="onSubmit()">
-    <div class="space-y-6">
-      <div>
-        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-          Tên dự án *
-        </label>
-        <input
-          type="text"
-          id="name"
-          formControlName="name"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          [class.border-red-500]="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
-          placeholder="Nhập tên dự án...">
-        <div *ngIf="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
-             class="mt-1 text-sm text-red-600">
-          <div *ngIf="projectForm.get('name')?.errors?.['required']">Tên dự án là bắt buộc</div>
-          <div *ngIf="projectForm.get('name')?.errors?.['minlength']">Tên dự án phải có ít nhất 3 ký tự</div>
-        </div>
-      </div>
-
-      <div>
-        <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-          Mô tả dự án *
-        </label>
-        <textarea
-          id="description"
-          formControlName="description"
-          rows="4"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-          [class.border-red-500]="projectForm.get('description')?.invalid && projectForm.get('description')?.touched"
-          placeholder="Mô tả chi tiết về dự án..."></textarea>
-        <div *ngIf="projectForm.get('description')?.invalid && projectForm.get('description')?.touched"
-             class="mt-1 text-sm text-red-600">
-          <div *ngIf="projectForm.get('description')?.errors?.['required']">Mô tả dự án là bắt buộc</div>
-          <div *ngIf="projectForm.get('description')?.errors?.['minlength']">Mô tả phải có ít nhất 10 ký tự</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex justify-end space-x-4 mt-8">
-      <button
-        type="button"
-        (click)="onCancel()"
-        class="px-6 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors">
-        Hủy
-      </button>
-      <button
-        type="submit"
-        [disabled]="projectForm.invalid || isSubmitting"
-        class="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center">
-        <svg *ngIf="isSubmitting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  <!-- Project Name -->
+  <div>
+    <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">
+      Tên dự án
+      <span class="text-red-500">*</span>
+    </label>
+    <div class="relative">
+      <input
+        type="text"
+        id="name"
+        formControlName="name"
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 bg-gray-50 focus:bg-white"
+        [class.border-red-300]="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
+        [class.bg-red-50]="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
+        placeholder="Ví dụ: Website Công ty, App Mobile...">
+      <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
         </svg>
-        {{ isEditMode ? 'Cập nhật' : 'Tạo dự án' }}
-      </button>
+      </div>
     </div>
-  </form>
-</div>
+    <div *ngIf="projectForm.get('name')?.invalid && projectForm.get('name')?.touched"
+         class="mt-2 text-sm text-red-600 flex items-center">
+      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+      </svg>
+      <span *ngIf="projectForm.get('name')?.errors?.['required']">Tên dự án là bắt buộc</span>
+      <span *ngIf="projectForm.get('name')?.errors?.['minlength']">Tên dự án phải có ít nhất 3 ký tự</span>
+    </div>
+  </div>
+
+  <!-- Project Description -->
+  <div>
+    <label for="description" class="block text-sm font-semibold text-gray-700 mb-2">
+      Mô tả dự án
+      <span class="text-red-500">*</span>
+    </label>
+    <textarea
+      id="description"
+      formControlName="description"
+      rows="4"
+      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition-all duration-200 bg-gray-50 focus:bg-white"
+      [class.border-red-300]="projectForm.get('description')?.invalid && projectForm.get('description')?.touched"
+      [class.bg-red-50]="projectForm.get('description')?.invalid && projectForm.get('description')?.touched"
+      placeholder="Mô tả chi tiết về mục tiêu, phạm vi và yêu cầu của dự án..."></textarea>
+    <div class="flex justify-between items-center mt-1">
+      <div *ngIf="projectForm.get('description')?.invalid && projectForm.get('description')?.touched"
+           class="text-sm text-red-600 flex items-center">
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span *ngIf="projectForm.get('description')?.errors?.['required']">Mô tả dự án là bắt buộc</span>
+        <span *ngIf="projectForm.get('description')?.errors?.['minlength']">Mô tả phải có ít nhất 10 ký tự</span>
+      </div>
+      <span class="text-xs text-gray-500">{{ projectForm.get('description')?.value?.length || 0 }}/1000</span>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+    <button
+      type="button"
+      (click)="onCancel()"
+      class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 font-medium">
+      <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+      Hủy
+    </button>
+    <button
+      type="submit"
+      [disabled]="!isFormValid || isSubmitting"
+      class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-medium flex items-center justify-center">
+      <svg *ngIf="isSubmitting" class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      <svg *ngIf="!isSubmitting" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      </svg>
+      {{ isEditMode ? 'Cập nhật dự án' : 'Tạo dự án' }}
+    </button>
+  </div>
+</form>

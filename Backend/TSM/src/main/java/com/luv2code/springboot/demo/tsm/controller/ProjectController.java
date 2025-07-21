@@ -1,10 +1,15 @@
 package com.luv2code.springboot.demo.tsm.controller;
 
+import com.luv2code.springboot.demo.tsm.dto.request.AddMemberRequest;
 import com.luv2code.springboot.demo.tsm.dto.request.CreateProjectRequest;
 import com.luv2code.springboot.demo.tsm.dto.request.UpdateProjectRequest;
 import com.luv2code.springboot.demo.tsm.dto.response.ProjectStatsResponse;
+import com.luv2code.springboot.demo.tsm.dto.response.UserResponse;
 import com.luv2code.springboot.demo.tsm.entity.Project;
+import com.luv2code.springboot.demo.tsm.entity.ProjectMember;
+import com.luv2code.springboot.demo.tsm.entity.Role;
 import com.luv2code.springboot.demo.tsm.entity.User;
+import com.luv2code.springboot.demo.tsm.service.ProjectMemberService;
 import com.luv2code.springboot.demo.tsm.service.ProjectService;
 import jakarta.validation.Valid;
 import lombok.Getter;
@@ -16,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/projects")
@@ -24,6 +30,8 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private ProjectMemberService projectMemberService;
 
     @PostMapping
     @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
@@ -36,7 +44,7 @@ public class ProjectController {
 
     // Tất cả authenticated users có thể xem stats
     @GetMapping("/{projectId}/stats")
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<ProjectStatsResponse> getProjectStats(@PathVariable Long projectId) {
         ProjectStatsResponse stats = projectService.getProjectStats(projectId);
         return ResponseEntity.ok(stats);
@@ -63,18 +71,61 @@ public class ProjectController {
 
     // Tất cả authenticated users có thể xem chi tiết dự án
     @GetMapping("/{projectId}")
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<Project> getProject(@PathVariable Long projectId) {
         Project project = projectService.findById(projectId);
         return ResponseEntity.ok(project);
     }
 
     @GetMapping("/my-projects")
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<List<Project>> getMyProjects(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         List<Project> projects = projectService.getAllUserProjects(user.getId());
         return ResponseEntity.ok(projects);
     }
 
+    @PostMapping("/{projectId}/members")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    public ResponseEntity<ProjectMember> addMember(@PathVariable Long projectId,
+                                                   @Valid @RequestBody AddMemberRequest request,
+                                                   Authentication authentication) {
+        User currentUser = (User) authentication.getPrincipal();
+        ProjectMember member = projectMemberService.addMemberToProject(
+                projectId,
+                request.getUserId(),
+                request.getRole(),
+                currentUser.getId()
+        );
+        return ResponseEntity.ok(member);
+    }
+
+    @GetMapping("/{projectId}/available-users")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
+    public ResponseEntity<List<UserResponse>> getAvailableUsersForProject(@PathVariable Long projectId) {
+        List<User> availableUsers = projectService.getAvailableUsersForProject(projectId);
+        List<UserResponse> response = availableUsers.stream()
+                .map(this::convertToUserResponse)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(response);
+    }
+
+    private UserResponse convertToUserResponse(User user) {
+        UserResponse response = new UserResponse();
+        response.setId(user.getId());
+        response.setUsername(user.getUsername());
+        response.setEmail(user.getEmail());
+        response.setFullName(user.getFullName());
+        response.setAvatarUrl(user.getAvatarUrl());
+        response.setEnabled(user.isEnabled());
+        response.setCreatedAt(user.getCreatedAt());
+        response.setUpdatedAt(user.getUpdatedAt());
+
+        List<String> roles = user.getRoles().stream()
+                .map(Role::getName)
+                .collect(Collectors.toList());
+        response.setRoles(roles);
+
+        return response;
+    }
 }

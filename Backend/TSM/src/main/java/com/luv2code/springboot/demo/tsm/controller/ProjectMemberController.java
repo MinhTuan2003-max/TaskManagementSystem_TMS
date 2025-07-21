@@ -61,7 +61,7 @@ public class ProjectMemberController {
 
     // Tất cả thành viên dự án có thể xem danh sách (bao gồm User)
     @GetMapping
-    @PreAuthorize("hasRole('USER') or hasRole('MANAGER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<List<ProjectMember>> getProjectMembers(@PathVariable Long projectId) {
         List<ProjectMember> members = projectMemberService.getProjectMembers(projectId);
         return ResponseEntity.ok(members);
