@@ -36,7 +36,7 @@ task-management-system/
 │   │   │   ├── dto/                      # Data Transfer Objects
 │   │   │   ├── entity/                   # JPA entities
 │   │   │   ├── repository/               # Spring Data JPA Repositories
-│   │   │   ├── security/                 # JWT, OAuth2, security config
+│   │   │   ├── security/                 # JWT, security config
 │   │   │   ├── service/                  # Business logic
 │   │   │   └── TaskManagementApplication.java  # Main class
 │   │   └── resources/
@@ -47,13 +47,52 @@ task-management-system/
 │   └── task-management-angular/
 │       ├── src/
 │       │   ├── app/
-│       │   │   ├── components/           # UI components
-│       │   │   ├── services/             # API communication
-│       │   │   ├── models/               # TypeScript interfaces
-│       │   │   └── app.module.ts         # Root Angular module
+│       │   │   ├── core/
+│       │   │   │   ├── guards/
+│       │   │   │   │   └── module-import-guard.ts
+│       │   │   │   ├── interceptor/
+│       │   │   │   │   ├── error-interceptor.ts
+│       │   │   │   │   └── jwt-interceptor.ts
+│       │   │   │   ├── models/
+│       │   │   │   │   ├── user.model.ts
+│       │   │   │   │   └── task.model.ts
+│       │   │   │   ├── services/
+│       │   │   │   │   ├── app-init.service.ts
+│       │   │   │   │   └── router-reuse.strategy.ts
+│       │   │
+│       │   │   ├── feature-one/
+│       │   │   │   ├── components/
+│       │   │   │   │   ├── component1/
+│       │   │   │   │   ├── component2/
+│       │   │   │   │   └── component3/
+│       │   │   │   ├── containers/
+│       │   │   │   │   ├── container1/
+│       │   │   │   │   ├── container2/
+│       │   │   │   │   └── container3/
+│       │   │   │   ├── pages/
+│       │   │   │   │   └── page1/
+│       │   │   │   └── feature-one-routing.module.ts
+│       │   │
+│       │   │   ├── feature-two/
+│       │   │   ├── feature-three/
+│       │   │
+│       │   │   ├── shared/
+│       │   │   │   ├── modules/
+│       │   │   │   │   ├── primeng.module.ts
+│       │   │   │   │   ├── material.module.ts
+│       │   │   │   │   └── *.module.ts
+│       │   │   │   ├── components/
+│       │   │   │   │   └── *.component.ts
+│       │   │   │   ├── directives/
+│       │   │   │   │   └── *.directive.ts
+│       │   │   │   └── pipes/
+│       │   │   │       └── *.pipe.ts
+│       │
+│       │   └── environments/
 │       └── angular.json                  # Angular config
 │
-└── README.md                             # Dự án mô tả tổng quan
+└── README.md                             # Project overview
+
 
 
 ## 🔐 Xác thực & Phân quyền
