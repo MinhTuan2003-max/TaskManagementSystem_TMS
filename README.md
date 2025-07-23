@@ -59,23 +59,23 @@ task-management-system/
 │       │   │   │   ├── services/
 │       │   │   │   │   ├── app-init.service.ts
 │       │   │   │   │   └── router-reuse.strategy.ts
-│       │   │
-│       │   │   ├── feature-one/
-│       │   │   │   ├── components/
-│       │   │   │   │   ├── component1/
-│       │   │   │   │   ├── component2/
-│       │   │   │   │   └── component3/
-│       │   │   │   ├── containers/
-│       │   │   │   │   ├── container1/
-│       │   │   │   │   ├── container2/
-│       │   │   │   │   └── container3/
-│       │   │   │   ├── pages/
-│       │   │   │   │   └── page1/
-│       │   │   │   └── feature-one-routing.module.ts
-│       │   │
-│       │   │   ├── feature-two/
-│       │   │   ├── feature-three/
-│       │   │
+│       │   │   ├── modules/
+│       │   │   │   ├── feature-one/
+│       │   │   │   │   ├── components/
+│       │   │   │   │   │   ├── component1/
+│       │   │   │   │   │   ├── component2/
+│       │   │   │   │   │   └── component3/
+│       │   │   │   │   ├── containers/
+│       │   │   │   │   │   ├── container1/
+│       │   │   │   │   │   ├── container2/
+│       │   │   │   │   │   └── container3/
+│       │   │   │   │   ├── pages/
+│       │   │   │   │   │   └── page1/
+│       │   │   │   │   └── feature-one-routing.module.ts
+│       │   │   │   │
+│       │   │   │   ├── feature-two/
+│       │   │   │   ├── feature-three/
+│       │   │   │
 │       │   │   ├── shared/
 │       │   │   │   ├── modules/
 │       │   │   │   │   ├── primeng.module.ts
