@@ -1,0 +1,8 @@
+<div class="task-card">
+  <h4>{{task.title}}</h4>
+  <p>{{task.description | slice:0:100}}</p>
+  <div>Status: {{task.status}}</div>
+  <div>Priority: {{task.priority}}</div>
+  <div>Deadline: {{task.deadline | date:'short'}}</div>
+  <button (click)="onEditClick()">Sửa</button>
+</div>

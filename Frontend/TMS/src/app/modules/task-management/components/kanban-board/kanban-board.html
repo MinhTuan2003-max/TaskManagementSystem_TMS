@@ -1,0 +1,14 @@
+<div *ngIf="board" class="kanban-board">
+  <div class="column">
+    <h3>To Do</h3>
+    <app-task-card *ngFor="let task of board.todo" [task]="task"></app-task-card>
+  </div>
+  <div class="column">
+    <h3>In Progress</h3>
+    <app-task-card *ngFor="let task of board.inProgress" [task]="task"></app-task-card>
+  </div>
+  <div class="column">
+    <h3>Done</h3>
+    <app-task-card *ngFor="let task of board.done" [task]="task"></app-task-card>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div *ngIf="task">
+  <h2>{{ task.title }}</h2>
+  <p>{{ task.description }}</p>
+  <p>Trạng thái: {{task.status}}</p>
+  <p>Deadline: {{ task.deadline | date:'short'}}</p>
+
+  <h3>Bình luận</h3>
+  <app-comment-list [comments]="comments"></app-comment-list>
+
+  <textarea [(ngModel)]="newComment" placeholder="Thêm bình luận..."></textarea>
+  <button (click)="addComment()">Gửi bình luận</button>
+</div>

@@ -68,6 +68,15 @@ export const routes: Routes = [
     title: 'Project Management'
   },
 
+  //Task routes
+  {
+    path: 'tasks',
+    loadChildren: () => import('./modules/task-management/task-management-routing.module').then(m => m.TaskManagementRoutingModule),
+    canActivate: [AuthGuard],
+    title: 'Task Management'
+  },
+
+
   // Error pages
   {
     path: 'unauthorized',

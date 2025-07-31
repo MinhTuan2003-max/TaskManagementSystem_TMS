@@ -1,0 +1,31 @@
+<div class="container">
+  <h2>Danh sách công việc</h2>
+
+  <div class="filters">
+    <input type="text" placeholder="Tìm kiếm..." [(ngModel)]="keyword" (ngModelChange)="onFilterChange()" />
+
+    <select [(ngModel)]="filterStatus" (change)="onFilterChange()">
+      <option value="">Tất cả trạng thái</option>
+      <option value="TODO">To Do</option>
+      <option value="IN_PROGRESS">In Progress</option>
+      <option value="REVIEW">Review</option>
+      <option value="DONE">Done</option>
+    </select>
+
+    <select [(ngModel)]="filterPriority" (change)="onFilterChange()">
+      <option value="">Tất cả độ ưu tiên</option>
+      <option value="LOW">Thấp</option>
+      <option value="MEDIUM">Trung bình</option>
+      <option value="HIGH">Cao</option>
+      <option value="URGENT">Khẩn</option>
+    </select>
+
+    <!-- TODO: Add assignee and project filters -->
+  </div>
+
+  <div class="task-list">
+    <app-task-card *ngFor="let task of tasks" [task]="task" (click)="goToView(task)"></app-task-card>
+  </div>
+
+  <button (click)="goToCreate()" class="btn btn-primary">Tạo công việc mới</button>
+</div>

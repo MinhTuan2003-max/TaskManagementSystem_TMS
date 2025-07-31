@@ -2,6 +2,7 @@ package com.luv2code.springboot.demo.tsm.controller;
 
 import com.luv2code.springboot.demo.tsm.dto.request.CreateTaskRequest;
 import com.luv2code.springboot.demo.tsm.dto.KanbanBoard;
+import com.luv2code.springboot.demo.tsm.entity.Comment;
 import com.luv2code.springboot.demo.tsm.entity.Task;
 import com.luv2code.springboot.demo.tsm.entity.enumerator.TaskStatus;
 import com.luv2code.springboot.demo.tsm.entity.User;
@@ -99,4 +100,44 @@ public class TaskController {
         List<Task> tasks = taskService.getTasksByAssignee(user.getId());
         return ResponseEntity.ok(tasks);
     }
+
+    @PutMapping("/{taskId}/assign")
+    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
+    public ResponseEntity<Task> assignTask(@PathVariable Long taskId,
+                                           @RequestBody Map<String, Long> assignRequest,
+                                           Authentication authentication) {
+        Long assigneeId = assignRequest.get("assigneeId");
+        User currentUser = (User) authentication.getPrincipal();
+        Task task = taskService.assignTask(taskId, assigneeId, currentUser.getId());
+        return ResponseEntity.ok(task);
+    }
+
+
+    @GetMapping("/search")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    public ResponseEntity<List<Task>> searchTasks(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) TaskStatus status,
+            @RequestParam(required = false) String priority,
+            @RequestParam(required = false) Long assigneeId,
+            @RequestParam(required = false) Long projectId,
+            Authentication authentication) {
+
+        User currentUser = (User) authentication.getPrincipal();
+        List<Task> tasks = taskService.searchTasks(keyword, status, priority, assigneeId, projectId, currentUser.getId());
+        return ResponseEntity.ok(tasks);
+    }
+
+    @PostMapping("/{taskId}/comments")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
+    public ResponseEntity<Comment> addComment(@PathVariable Long taskId,
+                                              @RequestBody Map<String, String> request,
+                                              Authentication authentication) {
+        String content = request.get("content");
+        User currentUser = (User) authentication.getPrincipal();
+        Comment comment = taskService.addComment(taskId, content, currentUser.getId());
+        return ResponseEntity.ok(comment);
+    }
+
+
 }

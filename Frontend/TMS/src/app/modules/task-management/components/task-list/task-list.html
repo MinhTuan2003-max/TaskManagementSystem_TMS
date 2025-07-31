@@ -1,0 +1,24 @@
+<div>
+  <input type="text" placeholder="Tìm kiếm..." [(ngModel)]="keyword" (input)="onFilterChange()" />
+
+  <select [(ngModel)]="filterStatus" (change)="onFilterChange()">
+    <option value="">Tất cả trạng thái</option>
+    <option value="TODO">To Do</option>
+    <option value="IN_PROGRESS">In Progress</option>
+    <option value="DONE">Done</option>
+  </select>
+
+  <select [(ngModel)]="filterPriority" (change)="onFilterChange()">
+    <option value="">Tất cả ưu tiên</option>
+    <option value="LOW">Thấp</option>
+    <option value="MEDIUM">Trung bình</option>
+    <option value="HIGH">Cao</option>
+    <option value="URGENT">Khẩn</option>
+  </select>
+
+  <button *ngIf="authService.hasAnyRole(['ROLE_MANAGER', 'ROLE_OWNER', 'ROLE_ADMIN'])" (click)="createTask()">Tạo task mới</button>
+
+  <div *ngFor="let task of tasks">
+    <app-task-card [task]="task" (editClicked)="editTask(task)"></app-task-card>
+  </div>
+</div>

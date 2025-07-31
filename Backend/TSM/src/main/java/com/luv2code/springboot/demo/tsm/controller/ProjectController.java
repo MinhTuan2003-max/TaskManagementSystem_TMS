@@ -85,21 +85,6 @@ public class ProjectController {
         return ResponseEntity.ok(projects);
     }
 
-    @PostMapping("/{projectId}/members")
-    @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
-    public ResponseEntity<ProjectMember> addMember(@PathVariable Long projectId,
-                                                   @Valid @RequestBody AddMemberRequest request,
-                                                   Authentication authentication) {
-        User currentUser = (User) authentication.getPrincipal();
-        ProjectMember member = projectMemberService.addMemberToProject(
-                projectId,
-                request.getUserId(),
-                request.getRole(),
-                currentUser.getId()
-        );
-        return ResponseEntity.ok(member);
-    }
-
     @GetMapping("/{projectId}/available-users")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER')")
     public ResponseEntity<List<UserResponse>> getAvailableUsersForProject(@PathVariable Long projectId) {

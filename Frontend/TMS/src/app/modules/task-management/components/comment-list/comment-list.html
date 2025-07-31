@@ -1,0 +1,4 @@
+<div *ngFor="let c of comments" class="comment">
+  <strong>{{ c.author?.fullName }}</strong> - <small>{{ c.createdAt | date:'short' }}</small>
+  <p>{{ c.content }}</p>
+</div>

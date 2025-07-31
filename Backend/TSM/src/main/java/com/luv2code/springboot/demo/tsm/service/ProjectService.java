@@ -124,4 +124,9 @@ public class ProjectService {
     public List<Project> getAllUserProjects(Long userId) {
         return projectRepository.findAllUserProjects(userId);
     }
+
+    public List<Project> getManagedProjects(Long userId) {
+        // Assuming you have a query in ProjectRepository to get projects where user is manager
+        return projectRepository.findProjectsManagedByUser(userId);
+    }
 }

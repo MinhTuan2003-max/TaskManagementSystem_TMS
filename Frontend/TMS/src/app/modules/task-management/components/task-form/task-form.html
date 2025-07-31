@@ -1,0 +1,31 @@
+<form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+  <label>Tiêu đề *</label>
+  <input formControlName="title" />
+
+  <label>Mô tả</label>
+  <textarea formControlName="description"></textarea>
+
+  <label>Độ ưu tiên</label>
+  <select formControlName="priority">
+    <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
+  </select>
+
+  <label>Deadline</label>
+  <input type="datetime-local" formControlName="deadline" />
+
+  <label>Dự án *</label>
+  <select formControlName="projectId">
+    <option *ngFor="let pr of projects" [value]="pr.id">{{ pr.name }}</option>
+  </select>
+
+  <label>Người giao</label>
+  <select formControlName="assigneeId">
+    <option [value]="null">Chưa giao</option>
+    <option *ngFor="let user of users" [value]="user.id">{{ user.fullName }}</option>
+  </select>
+
+  <button type="submit" [disabled]="!canCreateOrEdit()">
+    {{ isEditMode ? 'Cập nhật' : 'Tạo mới' }}
+  </button>
+  <button type="button" (click)="onCancel()">Hủy</button>
+</form>
