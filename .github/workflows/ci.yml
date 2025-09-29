@@ -11,6 +11,20 @@ jobs:
     name: Build & Test Backend
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: task_management
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     defaults:
       run:
         working-directory: Backend/TSM
@@ -25,11 +39,16 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Build with Maven
-        run: mvn -B clean install -DskipTests
+      - name: Wait for MySQL
+        run: |
+          for i in {1..15}; do
+            nc -z localhost 3306 && echo "MySQL is up!" && break
+            echo "Waiting for MySQL..."
+            sleep 5
+          done
 
-      - name: Run tests
-        run: mvn test
+      - name: Build & Run Tests
+        run: mvn -B clean install
 
   frontend:
     name: Build & Test Frontend
