@@ -280,4 +280,17 @@ public class TaskService {
         return taskRepository.findByAssigneeIdAndStatusOrderByDeadlineAsc(assigneeId, TaskStatus.TODO);
     }
 
+    //add comment
+    public Comment addComment(Long taskId, String content, Long authorId) {
+        Task task = taskRepository.findById(taskId).orElse(null);
+        if (task == null) {
+            throw new RuntimeException("Task not found");
+        }
+        Comment comment = new Comment();
+        comment.setContent(content);
+        comment.setAuthor(userService.findById(authorId));
+        comment.setTask(task);
+        return commentService.saveComment(comment);
+    }
+
 }

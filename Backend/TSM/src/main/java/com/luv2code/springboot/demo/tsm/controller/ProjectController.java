@@ -15,6 +15,7 @@ import jakarta.validation.Valid;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -113,4 +114,21 @@ public class ProjectController {
 
         return response;
     }
+
+    @GetMapping("/projects/{projectId}/members")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<ProjectMember>> getProjectMembers(
+            @PathVariable Long projectId, Authentication auth) {
+
+        User user = (User) auth.getPrincipal();
+
+        if (!projectMemberService.isUserMemberOfProject(user.getId(), projectId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        List<ProjectMember> members = projectMemberService.getProjectMembers(projectId);
+        return ResponseEntity.ok(members);
+    }
+
+
 }

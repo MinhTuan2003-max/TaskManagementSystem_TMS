@@ -58,7 +58,6 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-    // Chỉ Manager/Admin có thể xóa task
     @DeleteMapping("/{taskId}")
     @PreAuthorize("hasRole('MANAGER') or hasRole('ADMIN')")
     public ResponseEntity<Void> deleteTask(@PathVariable Long taskId,
@@ -68,7 +67,6 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    // Tất cả authenticated users có thể xem chi tiết task
     @GetMapping("/{taskId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<Task> getTask(@PathVariable Long taskId) {
@@ -76,7 +74,6 @@ public class TaskController {
         return ResponseEntity.ok(task);
     }
 
-    // Tất cả authenticated users có thể xem tasks by project
     @GetMapping("/project/{projectId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<List<Task>> getTasksByProject(@PathVariable Long projectId) {
@@ -84,7 +81,6 @@ public class TaskController {
         return ResponseEntity.ok(tasks);
     }
 
-    // Tất cả authenticated users có thể xem Kanban board
     @GetMapping("/project/{projectId}/kanban")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<KanbanBoard> getKanbanBoard(@PathVariable Long projectId) {
@@ -92,7 +88,6 @@ public class TaskController {
         return ResponseEntity.ok(board);
     }
 
-    // Tất cả authenticated users có thể xem tasks của mình
     @GetMapping("/my-tasks")
     @PreAuthorize("hasAnyRole('ADMIN', 'MANAGER', 'USER')")
     public ResponseEntity<List<Task>> getMyTasks(Authentication authentication) {

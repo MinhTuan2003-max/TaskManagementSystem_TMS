@@ -19,4 +19,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Long countByTaskId(Long taskId);
 
     void deleteByTaskId(Long taskId);
+
+   //save comment
+    Comment save(Comment comment);
 }

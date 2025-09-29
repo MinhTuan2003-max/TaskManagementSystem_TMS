@@ -1,31 +1,48 @@
 <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
-  <label>Tiêu đề *</label>
-  <input formControlName="title" />
-
-  <label>Mô tả</label>
-  <textarea formControlName="description"></textarea>
-
-  <label>Độ ưu tiên</label>
-  <select formControlName="priority">
-    <option *ngFor="let p of priorities" [value]="p">{{ p }}</option>
-  </select>
-
-  <label>Deadline</label>
-  <input type="datetime-local" formControlName="deadline" />
-
-  <label>Dự án *</label>
-  <select formControlName="projectId">
-    <option *ngFor="let pr of projects" [value]="pr.id">{{ pr.name }}</option>
-  </select>
-
-  <label>Người giao</label>
-  <select formControlName="assigneeId">
-    <option [value]="null">Chưa giao</option>
-    <option *ngFor="let user of users" [value]="user.id">{{ user.fullName }}</option>
-  </select>
-
-  <button type="submit" [disabled]="!canCreateOrEdit()">
-    {{ isEditMode ? 'Cập nhật' : 'Tạo mới' }}
-  </button>
-  <button type="button" (click)="onCancel()">Hủy</button>
+  <div class="form-group">
+    <label>Tiêu đề *</label>
+    <input formControlName="title" class="form-control" required />
+    <div *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched" class="error">
+      Bắt buộc nhập tiêu đề.
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Mô tả</label>
+    <textarea formControlName="description" class="form-control"></textarea>
+  </div>
+  <div class="form-row">
+    <div class="form-group col">
+      <label>Độ ưu tiên</label>
+      <select formControlName="priority" class="form-control" required>
+        <option *ngFor="let p of priorities" [ngValue]="p">{{ p }}</option>
+      </select>
+    </div>
+    <div class="form-group col">
+      <label>Deadline</label>
+      <input type="datetime-local" formControlName="deadline" class="form-control" />
+    </div>
+  </div>
+  <div class="form-group" *ngIf="!projectId || projects.length > 0">
+    <label>Dự án *</label>
+    <select formControlName="projectId" class="form-control" required>
+      <option [ngValue]="null" disabled>--Chọn dự án--</option>
+      <option *ngFor="let pr of projects" [ngValue]="pr.id">{{ pr.name }}</option>
+    </select>
+    <div *ngIf="taskForm.get('projectId')?.invalid && taskForm.get('projectId')?.touched" class="error">
+      Bắt buộc chọn dự án.
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Người được giao</label>
+    <select formControlName="assigneeId" class="form-control">
+      <option [ngValue]="null">Chưa giao</option>
+      <option *ngFor="let user of users" [ngValue]="user.id">{{ user.fullName }}</option>
+    </select>
+  </div>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary" [disabled]="!canCreateOrEdit() || taskForm.invalid">
+      {{ isEditMode ? 'Cập nhật' : 'Tạo mới' }}
+    </button>
+    <button type="button" class="btn btn-secondary" (click)="onCancel()">Hủy</button>
+  </div>
 </form>

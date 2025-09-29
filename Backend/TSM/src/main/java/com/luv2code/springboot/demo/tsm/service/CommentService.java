@@ -119,4 +119,9 @@ public class CommentService {
         if (user == null) return false;
         return user.getRoles().stream().anyMatch(role -> role.getName().equals("ROLE_ADMIN"));
     }
+
+    //save comment
+    public Comment saveComment(Comment comment) {
+        return commentRepository.save(comment);
+    }
 }

@@ -4,11 +4,13 @@ import {DatePipe, NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-comment-list',
+  templateUrl: './comment-list.html',
+  styleUrls: ['./comment-list.scss'],
+  standalone: true,
   imports: [
     NgForOf,
     DatePipe
-  ],
-  templateUrl: './comment-list.html'
+  ]
 })
 export class CommentListComponent {
   @Input() comments: Comment[] = [];

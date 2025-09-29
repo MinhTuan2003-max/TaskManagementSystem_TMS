@@ -1,8 +1,13 @@
-<div class="task-card">
-  <h4>{{task.title}}</h4>
-  <p>{{task.description | slice:0:100}}</p>
-  <div>Status: {{task.status}}</div>
-  <div>Priority: {{task.priority}}</div>
-  <div>Deadline: {{task.deadline | date:'short'}}</div>
-  <button (click)="onEditClick()">Sửa</button>
+<div class="task-card" [class.overdue]="isOverdue">
+  <h3>{{ task.title }}</h3>
+  <p>{{ task.description | slice:0:100 }}</p>
+  <div>Status: {{ task.status }}</div>
+  <div>Priority: {{ task.priority }}</div>
+  <div>Deadline: {{ task.deadline | date:'short' }}</div>
+  <div *ngIf="task.assignee">
+    Assigned to: {{ task.assignee.fullName }}
+  </div>
+  <button class="btn btn-secondary" (click)="onEditClick($event)">
+    Sửa
+  </button>
 </div>

@@ -1,1 +1,22 @@
-<p>view-task works!</p>
+<div *ngIf="task" class="task-detail-container">
+  <h2>{{ task.title }}</h2>
+  <p>{{ task.description }}</p>
+
+  <div>Status: {{ task.status }}</div>
+  <div>Priority: {{ task.priority }}</div>
+  <div>Deadline: {{ task.deadline | date: 'short' }}</div>
+  <div *ngIf="task.assignee">Assigned to: {{ task.assignee.fullName }}</div>
+
+  <button *ngIf="canEdit()" (click)="goToEdit()">Sửa công việc</button>
+  <hr>
+
+  <div class="comments-section">
+    <h3>Bình luận</h3>
+    <app-comment-list [comments]="comments"></app-comment-list>
+
+    <div *ngIf="canComment()">
+      <textarea [(ngModel)]="newComment" placeholder="Thêm bình luận..."></textarea>
+      <button (click)="addComment()">Gửi</button>
+    </div>
+  </div>
+</div>

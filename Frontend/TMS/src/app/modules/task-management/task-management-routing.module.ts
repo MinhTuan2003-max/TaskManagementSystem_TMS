@@ -5,7 +5,7 @@ import { TaskOverviewPage } from './pages/task-overview/task-overview';
 import { CreateTaskPage } from './pages/create-task/create-task';
 import { EditTaskPage } from './pages/edit-task/edit-task';
 import { ViewTaskPage } from './pages/view-task/view-task';
-import { Kanban } from './pages/kanban/kanban';
+import { KanbanPage } from './pages/kanban/kanban';
 import {RoleGuard} from '../../core/guards/role.guard';
 
 const routes: Routes = [
@@ -38,7 +38,7 @@ const routes: Routes = [
       },
       {
         path: 'kanban',
-        component: Kanban,
+        component: KanbanPage,
         data: { title: 'Bảng Kanban' }
       }
     ]

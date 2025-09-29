@@ -1,4 +1,9 @@
-<div *ngFor="let c of comments" class="comment">
-  <strong>{{ c.author?.fullName }}</strong> - <small>{{ c.createdAt | date:'short' }}</small>
-  <p>{{ c.content }}</p>
+<div class="comment" *ngFor="let comment of comments">
+  <div class="comment-header">
+    <strong>{{ comment.author?.fullName }}</strong>
+    <small>{{ comment.createdAt | date: 'short' }}</small>
+  </div>
+  <div class="comment-body">
+    {{ comment.content }}
+  </div>
 </div>

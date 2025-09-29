@@ -1,1 +1,14 @@
-<p>kanban works!</p>
+<div *ngIf="board" class="kanban-container">
+  <div class="kanban-column">
+    <h3>Chưa làm</h3>
+    <app-task-card *ngFor="let task of board.todo" [task]="task"></app-task-card>
+  </div>
+  <div class="kanban-column">
+    <h3>Đang làm</h3>
+    <app-task-card *ngFor="let task of board.inProgress" [task]="task"></app-task-card>
+  </div>
+  <div class="kanban-column">
+    <h3>Hoàn thành</h3>
+    <app-task-card *ngFor="let task of board.done" [task]="task"></app-task-card>
+  </div>
+</div>

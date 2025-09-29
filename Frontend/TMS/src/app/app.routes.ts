@@ -76,7 +76,6 @@ export const routes: Routes = [
     title: 'Task Management'
   },
 
-
   // Error pages
   {
     path: 'unauthorized',
