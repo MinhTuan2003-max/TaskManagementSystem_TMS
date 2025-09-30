@@ -8,8 +8,8 @@ import com.luv2code.springboot.demo.tsm.entity.User;
 import com.luv2code.springboot.demo.tsm.repository.RoleRepository;
 import com.luv2code.springboot.demo.tsm.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page; // ✅ Spring Data Page
-import org.springframework.data.domain.Pageable; // ✅ Spring Data Pageable
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +40,6 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(password));
         user.setFullName(fullName);
 
-        // Gán role mặc định
         Role userRole = roleRepository.findByName("ROLE_USER")
                 .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
         Set<Role> roles = new HashSet<>();
@@ -118,7 +117,6 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    // ✅ Pagination method với đúng types
     public Page<User> findAll(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
@@ -159,20 +157,16 @@ public class UserService {
         return new UserStatsResponse(totalUsers, activeUsers, newUsersThisMonth);
     }
 
-    // Admin statistics với đúng DTO class
     public AdminUserStatsResponse getAdminUserStats() {
         long totalUsers = userRepository.count();
         long activeUsers = userRepository.countByEnabledTrueAndAccountNonLockedTrue();
         long lockedUsers = userRepository.countByAccountNonLockedFalse();
 
-        // Calculate new users this month
         LocalDateTime startOfMonth = LocalDateTime.now().withDayOfMonth(1)
                 .withHour(0).withMinute(0).withSecond(0).withNano(0);
         long newUsersThisMonth = userRepository.countByCreatedAtAfter(startOfMonth);
 
         AdminUserStatsResponse stats = new AdminUserStatsResponse(totalUsers, activeUsers, lockedUsers, newUsersThisMonth);
-
-        // Count users by role
         AdminUserStatsResponse.UsersByRole usersByRole = stats.getUsersByRole();
         usersByRole.setAdmin(userRepository.countByRoles_Name("ROLE_ADMIN"));
         usersByRole.setManager(userRepository.countByRoles_Name("ROLE_MANAGER"));

@@ -3,49 +3,38 @@ package com.luv2code.springboot.demo.tsm.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.luv2code.springboot.demo.tsm.entity.enumerator.ProjectRole;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Setter
-@Getter
 @Entity
 @Table(name = "project_members")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class ProjectMember {
 
-    // Getters and Setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "project_id")
+    @JoinColumn(name = "project_id", nullable = false)
     @JsonIgnoreProperties({"tasks", "members"})
     private Project project;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties({"assignedTasks", "createdTasks", "ownedProjects"})
     private User user;
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private ProjectRole role = ProjectRole.MEMBER;
 
     @CreationTimestamp
-    @Column(name = "joined_at")
+    @Column(name = "joined_at", updatable = false)
     private LocalDateTime joinedAt;
-
-    // Constructors
-    public ProjectMember() {}
-
-    public ProjectMember(Project project, User user, ProjectRole role) {
-        this.project = project;
-        this.user = user;
-        this.role = role;
-    }
-
 }

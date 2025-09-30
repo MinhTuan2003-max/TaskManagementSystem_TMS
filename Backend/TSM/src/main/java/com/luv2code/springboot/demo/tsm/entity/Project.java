@@ -2,9 +2,7 @@ package com.luv2code.springboot.demo.tsm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -12,14 +10,14 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Setter
-@Getter
 @Entity
 @Table(name = "projects")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Project {
 
-    // Getters and Setters
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,33 +29,24 @@ public class Project {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id", nullable = false)
     @JsonIgnoreProperties({"projects", "ownedProjects"})
     private User owner;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"project"})
+    @JsonIgnoreProperties("project")
+    @Builder.Default
     private List<Task> tasks = new ArrayList<>();
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnoreProperties({"project"})
+    @JsonIgnoreProperties("project")
+    @Builder.Default
     private List<ProjectMember> members = new ArrayList<>();
 
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
-
-    // Constructors
-    public Project() {}
-
-    public Project(String name, String description, User owner) {
-        this.name = name;
-        this.description = description;
-        this.owner = owner;
-    }
-
 }

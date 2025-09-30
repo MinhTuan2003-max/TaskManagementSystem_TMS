@@ -3,6 +3,7 @@ package com.luv2code.springboot.demo.tsm.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
@@ -15,6 +16,11 @@ import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class User implements UserDetails {
 
     @Id
@@ -36,24 +42,16 @@ public class User implements UserDetails {
     @Column(name = "avatar_url")
     private String avatarUrl;
 
-    @Column(name = "enabled")
     private boolean enabled = true;
-
-    @Column(name = "account_non_expired")
     private boolean accountNonExpired = true;
-
-    @Column(name = "account_non_locked")
     private boolean accountNonLocked = true;
-
-    @Column(name = "credentials_non_expired")
     private boolean credentialsNonExpired = true;
 
     @CreationTimestamp
-    @Column(name = "created_at")
+    @Column(updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @ManyToMany(fetch = FetchType.EAGER)
@@ -77,16 +75,6 @@ public class User implements UserDetails {
     @JsonIgnore
     private List<Task> createdTasks = new ArrayList<>();
 
-    // Constructors
-    public User() {}
-
-    public User(String username, String email, String password, String fullName) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.fullName = fullName;
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
@@ -94,75 +82,8 @@ public class User implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return accountNonExpired;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return accountNonLocked;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return credentialsNonExpired;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public void setUsername(String username) { this.username = username; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public void setPassword(String password) { this.password = password; }
-
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-
-    public String getAvatarUrl() { return avatarUrl; }
-    public void setAvatarUrl(String avatarUrl) { this.avatarUrl = avatarUrl; }
-
-    public void setEnabled(boolean enabled) { this.enabled = enabled; }
-
-    public void setAccountNonExpired(boolean accountNonExpired) { this.accountNonExpired = accountNonExpired; }
-
-    public void setAccountNonLocked(boolean accountNonLocked) { this.accountNonLocked = accountNonLocked; }
-
-    public void setCredentialsNonExpired(boolean credentialsNonExpired) { this.credentialsNonExpired = credentialsNonExpired; }
-
-    public Set<Role> getRoles() { return roles; }
-    public void setRoles(Set<Role> roles) { this.roles = roles; }
-
-    public List<Project> getOwnedProjects() { return ownedProjects; }
-    public void setOwnedProjects(List<Project> ownedProjects) { this.ownedProjects = ownedProjects; }
-
-    public List<Task> getAssignedTasks() { return assignedTasks; }
-    public void setAssignedTasks(List<Task> assignedTasks) { this.assignedTasks = assignedTasks; }
-
-    public List<Task> getCreatedTasks() { return createdTasks; }
-    public void setCreatedTasks(List<Task> createdTasks) { this.createdTasks = createdTasks; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
-
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    @Override public boolean isAccountNonExpired() { return accountNonExpired; }
+    @Override public boolean isAccountNonLocked() { return accountNonLocked; }
+    @Override public boolean isCredentialsNonExpired() { return credentialsNonExpired; }
+    @Override public boolean isEnabled() { return enabled; }
 }

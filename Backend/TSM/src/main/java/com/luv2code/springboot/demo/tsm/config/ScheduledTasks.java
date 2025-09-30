@@ -11,7 +11,6 @@ public class ScheduledTasks {
     @Autowired
     private NotificationService notificationService;
 
-    // Chạy cleanup mỗi ngày lúc 2:00 AM
     @Scheduled(cron = "0 0 2 * * ?")
     public void cleanupOldNotifications() {
         notificationService.cleanupOldNotifications();
